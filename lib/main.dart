@@ -1,33 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:whai_i_do/page/notes_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:whai_i_do/App/AppRoutes.dart';
+import 'package:whai_i_do/data/cubit/theme_cubit.dart';
+import 'package:whai_i_do/data/dataprovider/CustomBlocProvider.dart';
+
+import 'presntation/page/notes_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const CustomBlocProvider());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  final AppRouter appRouter;
+
+  const MyApp({
+    Key? key,
+    required this.appRouter,
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    ThemeCubit themeCubit = BlocProvider.of<ThemeCubit>(context, listen: true);
+    bool isDark  = themeCubit.isDark;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      
       // theme: ThemeData.light(),
-      theme: ThemeData(
-        primarySwatch: Colors.cyan,
+      // theme: isDark ? ThemeData.dark() : ThemeData.light(),
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+      darkTheme:  ThemeData.dark().copyWith(
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blueGrey[900],
+          elevation: 0.0,
+        ),
+        accentColor:  Colors.cyan,
         scaffoldBackgroundColor: Colors.blueGrey[900],
-        iconTheme: IconThemeData(
-          color: Colors.white,
+        iconTheme: const IconThemeData(
+          color: Colors.cyan,
+        ),
+         floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.cyan,
         ),
         dialogTheme: DialogTheme(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24)
-          )
+          ),
+          backgroundColor: Colors.white,
         )
       ),
-      home:  NotePage(),
+      theme: ThemeData.light().copyWith(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.cyan,
+          elevation: 0.0,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+         iconTheme: const IconThemeData(
+          color: Colors.cyan,
+        ),
+        dialogTheme: DialogTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24)
+          ),
+          backgroundColor: Colors.white,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.cyan,
+        )
+      ),
+      // home: const NotePage(),
+      initialRoute: '/home',
+      onGenerateRoute: appRouter.generateRoute,
     );
   }
 }

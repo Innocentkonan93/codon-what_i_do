@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:whai_i_do/Database/note_database.dart';
-import 'package:whai_i_do/Models/note.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whai_i_do/data/cubit/theme_cubit.dart';
+import '../../data/Database/note_database.dart';
+import '../../data/Models/Note.dart';
 
 class EditNotePage extends StatefulWidget {
   final Note note;
@@ -22,14 +24,17 @@ class _EditNotePageState extends State<EditNotePage> {
     super.initState();
   }
 
- @override
+  @override
   void dispose() {
     titleController.dispose();
     descriptionController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
+    ThemeCubit themeCubit = BlocProvider.of<ThemeCubit>(context, listen: true);
+    bool isDark = themeCubit.isDark;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -37,27 +42,34 @@ class _EditNotePageState extends State<EditNotePage> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.blueGrey[900],
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
           actions: [
             TextButton(
               onPressed: () async {
-                await NoteDatabase.instance.updateNote(
+                await NoteDatabase.instance
+                    .updateNote(
                   Note(
-                    title: titleController.text,
-                    description: descriptionController.text,
-                    isImportant: widget.note.isImportant,
-                    number: widget.note.number,
-                    id: widget.note.id,
-                    createdTime: widget.note.createdTime
-                  ),
-                ).then((value) {
+                      id: widget.note.id,
+                      title: titleController.text,
+                      isImportant: widget.note.isImportant,
+                      isUrgent: false,
+                      number: widget.note.number,
+                      description: descriptionController.text,
+                      reminderDate: null,
+                      createdTime: widget.note.createdTime),
+                )
+                    .then((value) {
                   Navigator.pop(context, true);
                 });
               },
-              child: const Text('Enregistrer'),
+              child: Text(
+                'Enregistrer',
+                style: TextStyle(
+                  color: isDark ? Colors.green : Colors.white,
+                ),
+              ),
             ),
           ],
         ),
@@ -67,26 +79,28 @@ class _EditNotePageState extends State<EditNotePage> {
             child: Column(
               children: [
                 TextField(
-                  autofocus: true,
                   controller: titleController,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: isDark ? Colors.white : Colors.black,
                   ),
-                  decoration: const InputDecoration(
-                      // border: InputBorder.none
-                      hintText: "Titre",
-                      ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintStyle:
+                        TextStyle(color: isDark ? Colors.white : Colors.black),
+                    hintText: "Titre",
+                  ),
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  autofocus: true,
                   controller: descriptionController,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: isDark ? Colors.white : Colors.black,
                   ),
                   decoration: const InputDecoration(
-                    // border: InputBorder.none
+                    border: InputBorder.none,
                     hintText: "Description",
                   ),
                   maxLines: 10,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:whai_i_do/data/cubit/theme_cubit.dart';
+import '../../data/Models/Note.dart';
 
-import 'package:whai_i_do/Models/note.dart';
+
 
 class NoteCardWidget extends StatefulWidget {
   final Note note;
@@ -20,6 +23,8 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
   @override
   Widget build(BuildContext context) {
     final date = DateFormat("d.M.yyyy ").format(widget.note.createdTime);
+      ThemeCubit themeCubit = BlocProvider.of<ThemeCubit>(context, listen: true);
+    bool isDark = themeCubit.isDark;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(5),
@@ -27,15 +32,15 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
         vertical: 5
       ),
       decoration: BoxDecoration(
-          color: !widget.note.isImportant ? Colors.yellow[700] : Colors.cyan,
+          color: widget.note.isImportant ? Colors.yellow[700] : widget.note.isUrgent ? Colors.red[900]: Colors.cyan ,
           // borderRadius:
           //     const BorderRadius.vertical(bottom: Radius.circular(12)),
           boxShadow: const [
             BoxShadow(
-              offset: Offset(0, 5),
-              color: Colors.black45,
-              spreadRadius: 2,
-              blurRadius: 20
+              offset: Offset(-2, 2),
+              color: Colors.black38,
+              spreadRadius: 1,
+              blurRadius: 10
             )
           ]
       ),
@@ -51,12 +56,12 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
                   return Container(
                     height: 1,
                     width: 2,
-                    color: Colors.blueGrey[900],
+                    color: !isDark ? Colors.grey[200] : Colors.blueGrey[900],
                   );
                 }
                 return CircleAvatar(
                 radius: 5,
-                backgroundColor: Colors.blueGrey[900],
+                backgroundColor: !isDark ? Colors.grey[200] : Colors.blueGrey[900],
               );
               }
             ),
@@ -71,6 +76,8 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
             style: GoogleFonts.quicksand(
               fontSize: 18,
               fontWeight: FontWeight.w700,
+              color:widget.note.isUrgent ? Colors.white70:  Colors.black,
+
             ),
           ),
           const Spacer(),
@@ -85,6 +92,7 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
             style: GoogleFonts.quicksand(
               fontSize: 17,
               fontWeight: FontWeight.w500,
+              color: widget.note.isUrgent ? Colors.white70 : Colors.black,
             ),
             maxLines: 2,
           ),
@@ -99,7 +107,7 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
             style: GoogleFonts.quicksand(
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: Colors.black38
+              color:  Colors.black38
             ),
           ),
         ],

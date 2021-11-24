@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_declarations
 
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
-import 'package:path/path.dart';
-import 'package:whai_i_do/Models/note.dart';
+import 'package:whai_i_do/data/Models/Note.dart';
 
 class NoteDatabase {
   static final NoteDatabase instance = NoteDatabase._init();
@@ -25,7 +25,7 @@ class NoteDatabase {
     //
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 2, onCreate: _createDB);
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
 // CREATE DATABASE
@@ -46,7 +46,7 @@ class NoteDatabase {
     //   )
     // ''');
     await db.execute(
-        'CREATE TABLE notes (${NoteFields.id} INTEGER PRIMARY KEY AUTOINCREMENT, ${NoteFields.isImportant} BOOLEAN NOT NULL, ${NoteFields.number} INTEGER NOT NULL, ${NoteFields.title} TEXT NOT NULL, ${NoteFields.description} TEXT NOT NULL, ${NoteFields.time} TEXT NOT NULL)');
+        'CREATE TABLE notes (${NoteFields.id} INTEGER PRIMARY KEY AUTOINCREMENT, ${NoteFields.isImportant} BOOLEAN NOT NULL, ${NoteFields.isUrgent} BOOLEAN NOT NULL, ${NoteFields.number} INTEGER NOT NULL, ${NoteFields.title} TEXT NOT NULL, ${NoteFields.description} TEXT NOT NULL, ${NoteFields.reminderDate} TEXT NULL, ${NoteFields.time} TEXT NOT NULL)');
   }
 
 // CREATE NOTE
