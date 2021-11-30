@@ -7,11 +7,16 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:whai_i_do/data/Database/note_database.dart';
 import 'package:whai_i_do/data/Models/Note.dart';
+import 'package:whai_i_do/data/Services/NotificationService.dart';
+import 'package:whai_i_do/data/cubit/note_cubit.dart';
 import 'package:whai_i_do/data/cubit/theme_cubit.dart';
 
 import 'package:whai_i_do/presntation/page/note_detail_page.dart';
 import 'package:whai_i_do/presntation/widget/new_note_form.dart';
 import 'package:whai_i_do/presntation/widget/note_card.dart';
+
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class NotePage extends StatefulWidget {
   const NotePage({Key? key}) : super(key: key);
@@ -49,6 +54,8 @@ class _NotePageState extends State<NotePage> {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<NoteCubit>(context).fetchNotes();
+
     ThemeCubit themeCubit = BlocProvider.of<ThemeCubit>(context, listen: true);
     bool isDark = themeCubit.isDark;
     return BlocListener<ThemeCubit, ThemeState>(
@@ -85,7 +92,9 @@ class _NotePageState extends State<NotePage> {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+               
+              },
               icon: const Icon(
                 Icons.search,
                 // color: Colors.white,
@@ -207,6 +216,7 @@ class _NotePageState extends State<NotePage> {
         this.index = index;
         return GestureDetector(
           onTap: () async {
+
             await Navigator.of(context).push(
               MaterialPageRoute(
                 fullscreenDialog: true,

@@ -7,14 +7,14 @@ import 'package:http/http.dart';
 class NetworkService{
 
   final baseURl = "http://localhost:3000";
-
-
   
   Future<List<dynamic>> fetchNotes() async{
     try {
-      final response =await get(Uri.parse(baseURl+"/notes"));
+      final response =await get(Uri.parse(baseURl + "/notes"));
+      print(jsonDecode(response.body));
       return jsonDecode(response.body);
     }  catch (e) {
+      print(e);
       return [];
     }
   }

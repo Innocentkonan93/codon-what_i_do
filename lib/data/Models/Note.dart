@@ -74,7 +74,7 @@ class Note {
         number: json[NoteFields.number] as int,
         title: json[NoteFields.title] as String,
         description: json[NoteFields.description] as String,
-        reminderDate : DateTime.parse(json[NoteFields.time] as String),
+        reminderDate : DateTime.parse(json[NoteFields.reminderDate] as String),
         createdTime: DateTime.parse(json[NoteFields.time] as String),
       );
 
@@ -86,7 +86,7 @@ class Note {
         NoteFields.isUrgent: isUrgent ? 1 : 0,
         NoteFields.number: number,
         NoteFields.description: description,
-        NoteFields.time: reminderDate,
+        NoteFields.reminderDate: reminderDate!.toIso8601String(),
         NoteFields.time: createdTime.toIso8601String()
       };
 }

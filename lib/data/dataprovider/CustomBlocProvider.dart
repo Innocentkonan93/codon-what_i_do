@@ -15,7 +15,7 @@ class CustomBlocProvider extends StatelessWidget {
       providers: [
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(),
-        )
+        ),
       ],
       child:  MyApp(appRouter: AppRouter(),),
     );

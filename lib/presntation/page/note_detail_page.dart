@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:whai_i_do/data/cubit/theme_cubit.dart';
+import 'package:whai_i_do/presntation/widget/edit_police.dart';
+import 'package:whai_i_do/presntation/widget/new_reminder_form.dart';
 import '../../data/Models/Note.dart';
 import '../../data/Database/note_database.dart';
 
@@ -25,6 +27,7 @@ class _NoteDetailPageState extends State<NoteDetailPage>
   FocusNode focusNode = FocusNode();
   Note? note;
   bool isLoading = false;
+  double fontSize = 18;
 
   @override
   void initState() {
@@ -109,7 +112,11 @@ class _NoteDetailPageState extends State<NoteDetailPage>
                           context: context,
                           builder: (context) {
                             return Dialog(
-                              child: SizedBox(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
                                 height: 180,
                                 width: double.infinity,
                                 child: Column(
@@ -198,6 +205,7 @@ class _NoteDetailPageState extends State<NoteDetailPage>
                           ),
                           onTap: () {
                             print("rappel");
+                            refreshNote();
                           },
                           value: "rappel",
                         ),
@@ -220,6 +228,7 @@ class _NoteDetailPageState extends State<NoteDetailPage>
                           ),
                           onTap: () {
                             print("police");
+                            refreshNote();
                           },
                           value: "police",
                         ),
@@ -235,16 +244,32 @@ class _NoteDetailPageState extends State<NoteDetailPage>
                     ),
                     enableFeedback: true,
                     offset: const Offset(-10.0, kToolbarHeight),
-                    onSelected: (value) {
+                    onSelected: (value) async {
                       if (value.isNotEmpty && value == "rappel") {
                         showModalBottomSheet(
-                            context: context,
-                            builder: (context) => Container());
+                          barrierColor: Colors.transparent,
+                          elevation: 10,
+                          backgroundColor: isDark ? Colors.blueGrey[900] : null,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20))),
+                          context: context,
+                          builder: (context) => NewreminderForm(note: note!),
+                        );
                       }
                       if (value.isNotEmpty && value == "police") {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (context) => Container());
+                        final fontS = await showModalBottomSheet(
+                          barrierColor: Colors.transparent,
+                          backgroundColor: isDark ? Colors.blueGrey[900] : null,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20))),
+                          context: context,
+                          builder: (context) => EditPolice(fontSize),
+                        );
+                        setState(() {
+                          fontSize = fontS;
+                        });
                       }
                     },
                   ),
@@ -263,10 +288,10 @@ class _NoteDetailPageState extends State<NoteDetailPage>
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     color: note?.isImportant == true
-                        ? Colors.yellow[700]
+                        ? Colors.orange[300]
                         : note?.isUrgent == true
-                            ? Colors.red[900]
-                            : Colors.cyan,
+                            ? Colors.red[300]
+                            : Colors.cyan[200],
                     // ? const Color(0XFFF3F391)
                     // borderRadius:
                     //     const BorderRadius.vertical(bottom: Radius.circular(12)),
@@ -318,6 +343,14 @@ class _NoteDetailPageState extends State<NoteDetailPage>
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
+                                        if (DateTime.now()
+                                            .isBefore(note!.reminderDate!))
+                                          const Icon(
+                                            Icons.alarm,
+                                            size: 15,
+                                            color: Colors.black87,
+                                          ),
+                                          Spacer(),
                                         Text(
                                           "Créée le " +
                                               DateFormat("d.M.yyyy ")
@@ -341,9 +374,7 @@ class _NoteDetailPageState extends State<NoteDetailPage>
                                           style: GoogleFonts.quicksand(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w700,
-                                            color: note!.isUrgent
-                                                ? Colors.white70
-                                                : Colors.black,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ],
@@ -354,11 +385,9 @@ class _NoteDetailPageState extends State<NoteDetailPage>
                                       child: Text(
                                         note!.description + "\n\n\n\n",
                                         style: GoogleFonts.quicksand(
-                                          fontSize: 18,
+                                          fontSize: fontSize,
                                           fontWeight: FontWeight.w500,
-                                          color: note!.isUrgent
-                                              ? Colors.white70
-                                              : Colors.black,
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),

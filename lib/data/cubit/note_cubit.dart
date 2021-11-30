@@ -7,8 +7,10 @@ part 'note_state.dart';
 class NoteCubit extends Cubit<NoteState> {
 
   final Repository repository;
-  
+
   NoteCubit(this.repository) : super(NoteInitial());
 
-  void fetchNotes() {}
+  void fetchNotes() {
+    repository.fetchNotesData();
+  }
 }

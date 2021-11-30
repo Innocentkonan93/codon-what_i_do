@@ -54,10 +54,10 @@ class _EditNotePageState extends State<EditNotePage> {
                       id: widget.note.id,
                       title: titleController.text,
                       isImportant: widget.note.isImportant,
-                      isUrgent: false,
+                      isUrgent: widget.note.isUrgent,
                       number: widget.note.number,
                       description: descriptionController.text,
-                      reminderDate: null,
+                      reminderDate: widget.note.reminderDate,
                       createdTime: widget.note.createdTime),
                 )
                     .then((value) {

@@ -3,8 +3,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whai_i_do/data/Database/note_database.dart';
 import 'package:whai_i_do/data/Models/Note.dart';
+import 'package:whai_i_do/data/cubit/theme_cubit.dart';
 
 class NewNoteForm extends StatefulWidget {
   final int index;
@@ -49,6 +51,8 @@ class _NewNoteFormState extends State<NewNoteForm> {
 
   @override
   Widget build(BuildContext context) {
+    final themeCubit = BlocProvider.of<ThemeCubit>(context);
+    final bool isDark = themeCubit.isDark;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -58,7 +62,7 @@ class _NewNoteFormState extends State<NewNoteForm> {
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: 5,
+            vertical: 12,
             horizontal: 12,
           ),
           child: Form(
@@ -74,12 +78,10 @@ class _NewNoteFormState extends State<NewNoteForm> {
                 //     color: Colors.black,
                 //   ),
                 // ),
-                const SizedBox(
-                  height: 20,
-                ),
+                
                 TextFormField(
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style:  TextStyle(
+                    color: isDark ? Colors.white : Colors.black,
                   ),
                   validator: (val) {
                     if (val!.isEmpty) {
@@ -90,18 +92,28 @@ class _NewNoteFormState extends State<NewNoteForm> {
                   textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                     hintText: "Titre",
-                     hintStyle: const TextStyle(
-                      color: Colors.black,
+                    hintStyle: const  TextStyle(
+                      color: Colors.grey,
                     ),
+                    contentPadding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                    isDense: true,
                     border: InputBorder.none,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
                     filled: true,
                     fillColor: Colors.black.withOpacity(0.05),
                   ),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style:  TextStyle(
+                    color: isDark ? Colors.white : Colors.black,
                   ),
                   validator: (val) {
                     if (val!.isEmpty) {
@@ -113,67 +125,71 @@ class _NewNoteFormState extends State<NewNoteForm> {
                   decoration: InputDecoration(
                     hintText: "Description",
                     hintStyle: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.grey,
                     ),
                     border: InputBorder.none,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
                     filled: true,
                     fillColor: Colors.black.withOpacity(0.05),
                   ),
                   maxLines: 5,
                 ),
-                SizedBox(
-                  height: 40,
-
-                  child: CheckboxListTile(
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-
-                    title: const Text(
-                      "Marqué urgent",
-                      style: TextStyle(
-                        color: Colors.red,
-                      ),
+                CheckboxListTile(
+                  contentPadding: const EdgeInsets.all(1),
+                  title: const Text(
+                    "Urgent",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 14,
                     ),
-                    value: isUrgent,
-                    onChanged: (newValue) {
+                  ),
+                  value: isUrgent,
+                  onChanged: (newValue) {
+                    if (isImportant) {
+                      print('null');
+                    } else {
                       setState(() {
                         isUrgent = newValue!;
                       });
-                    },
-                    activeColor: Colors.red,
-                    checkColor: Colors.white,
-                    controlAffinity:
-                        ListTileControlAffinity.platform, //  <-- leading Checkbox
-                  ),
+                    }
+                  },
+                  activeColor: Colors.red,
+                  checkColor: Colors.white,
+                  controlAffinity:
+                      ListTileControlAffinity.platform, //  <-- leading Checkbox
                 ),
-                SizedBox(
-                  height: 40,
-                  child: CheckboxListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                    title: const Text(
-                      "Marqué important",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                CheckboxListTile(
+                  contentPadding: const EdgeInsets.all(1),
+                  title:  Text(
+                    "Important",
+                    style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black,
+                      fontSize: 14,
                     ),
-                    value:  isImportant,
-                    onChanged: (newValue) {
-                      if(isUrgent){
-                        print('null');
-                      }else{
-                        setState(() {
-                          isImportant = newValue!;
-                        });
-                      }
-                      
-                    },
-                    activeColor: Colors.cyan,
-                    checkColor: Colors.white,
-                    controlAffinity:
-                        ListTileControlAffinity.platform, //  <-- leading Checkbox
                   ),
+                  value: isImportant,
+                  onChanged: (newValue) {
+                    if (isUrgent) {
+                      print('null');
+                    } else {
+                      setState(() {
+                        isImportant = newValue!;
+                      });
+                    }
+                  },
+                  activeColor:  Colors.cyan,
+                  checkColor: Colors.white,
+                  controlAffinity:
+                      ListTileControlAffinity.platform, //  <-- leading Checkbox
                 ),
-                Spacer(),
+                const Spacer(),
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
@@ -184,20 +200,23 @@ class _NewNoteFormState extends State<NewNoteForm> {
                           number: widget.index + 1,
                           description: descController.text,
                           title: titleController.text,
+                          reminderDate: DateTime(0,0,0,0),
                           createdTime: DateTime.now(),
-                          reminderDate: null,
                         ),
                       );
                       Navigator.pop(context, false);
                       refreshNote();
                     }
                   },
-                  child: Text("Ajouter"),
+                  child: const Text("Ajouter"),
                   style: ElevatedButton.styleFrom(
-                      onPrimary: Colors.white,
-                      primary: Colors.cyan,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50))),
+                    onPrimary: Colors.white,
+                    primary: Colors.cyan,
+                    elevation: 0.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
                 )
               ],
             ),
