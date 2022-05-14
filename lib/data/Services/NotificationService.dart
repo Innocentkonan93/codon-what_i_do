@@ -130,14 +130,14 @@ class NotificationApi {
       time.second,
     );
     return scheduleDate.isBefore(now)
-        ? scheduleDate.add(Duration(days: 1))
+        ? scheduleDate.add(const Duration(days: 1))
         : scheduleDate;
   }
 
   static tz.TZDateTime scheduleWeekly(Time time, {required List<int> days}) {
     tz.TZDateTime scheduleDate = _scheduleDaily(time);
     while (!days.contains(scheduleDate.weekday)) {
-      scheduleDate = scheduleDate.add(Duration(days: 1));
+      scheduleDate = scheduleDate.add(const Duration(days: 1));
     }
     return scheduleDate;
   }

@@ -103,7 +103,7 @@ class _NewreminderFormState extends State<NewreminderForm> {
             const SizedBox(
               height: 20,
             ),
-            const Icon(Icons.alarm, size: 75),
+            const Icon(Icons.alarm, size: 55),
             const SizedBox(
               height: 20,
             ),
@@ -128,7 +128,7 @@ class _NewreminderFormState extends State<NewreminderForm> {
                             "$date",
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 46,
+                              fontSize: 30,
                             ),
                           ),
                         )
@@ -164,7 +164,7 @@ class _NewreminderFormState extends State<NewreminderForm> {
                             "$time",
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 46,
+                              fontSize: 30,
                             ),
                           ),
                         )
@@ -254,7 +254,7 @@ class _NewreminderFormState extends State<NewreminderForm> {
                             },
                           );
                         }).then((value) {
-                          Future.delayed(Duration(seconds: 2), () {
+                          Future.delayed(const Duration(seconds: 2), () {
                             Get.back();
                           });
                         });

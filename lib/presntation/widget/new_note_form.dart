@@ -53,172 +53,180 @@ class _NewNoteFormState extends State<NewNoteForm> {
   Widget build(BuildContext context) {
     final themeCubit = BlocProvider.of<ThemeCubit>(context);
     final bool isDark = themeCubit.isDark;
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: SizedBox(
-        height: max(400, 500),
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 12,
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // const Text(
-                //   "Nouvelle note",
-                //   style: TextStyle(
-                //     fontSize: 19,
-                //     fontWeight: FontWeight.bold,
-                //     color: Colors.black,
-                //   ),
-                // ),
-                
-                TextFormField(
-                  style:  TextStyle(
-                    color: isDark ? Colors.white : Colors.black,
-                  ),
-                  validator: (val) {
-                    if (val!.isEmpty) {
-                      return "Ajouter un titre";
-                    }
-                  },
-                  controller: titleController,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    hintText: "Titre",
-                    hintStyle: const  TextStyle(
-                      color: Colors.grey,
-                    ),
-                    contentPadding: EdgeInsets.fromLTRB(12, 12, 12, 12),
-                    isDense: true,
-                    border: InputBorder.none,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.black.withOpacity(0.05),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  style:  TextStyle(
-                    color: isDark ? Colors.white : Colors.black,
-                  ),
-                  validator: (val) {
-                    if (val!.isEmpty) {
-                      return "Ajouter une description";
-                    }
-                  },
-                  controller: descController,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    hintText: "Description",
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
-                    ),
-                    border: InputBorder.none,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.black.withOpacity(0.05),
-                  ),
-                  maxLines: 5,
-                ),
-                CheckboxListTile(
-                  contentPadding: const EdgeInsets.all(1),
-                  title: const Text(
-                    "Urgent",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 14,
-                    ),
-                  ),
-                  value: isUrgent,
-                  onChanged: (newValue) {
-                    if (isImportant) {
-                      print('null');
-                    } else {
-                      setState(() {
-                        isUrgent = newValue!;
-                      });
-                    }
-                  },
-                  activeColor: Colors.red,
-                  checkColor: Colors.white,
-                  controlAffinity:
-                      ListTileControlAffinity.platform, //  <-- leading Checkbox
-                ),
-                CheckboxListTile(
-                  contentPadding: const EdgeInsets.all(1),
-                  title:  Text(
-                    "Important",
+    return SingleChildScrollView(
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SizedBox(
+          height: max(400, 500),
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: 12,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // const Text(
+                  //   "Nouvelle note",
+                  //   style: TextStyle(
+                  //     fontSize: 19,
+                  //     fontWeight: FontWeight.bold,
+                  //     color: Colors.black,
+                  //   ),
+                  // ),
+
+                  TextFormField(
                     style: TextStyle(
                       color: isDark ? Colors.white : Colors.black,
-                      fontSize: 14,
+                    ),
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return "Ajouter un titre";
+                      }
+                    },
+                    controller: titleController,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      hintText: "Titre",
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      contentPadding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                      isDense: true,
+                      border: InputBorder.none,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.black.withOpacity(0.05),
                     ),
                   ),
-                  value: isImportant,
-                  onChanged: (newValue) {
-                    if (isUrgent) {
-                      print('null');
-                    } else {
-                      setState(() {
-                        isImportant = newValue!;
-                      });
-                    }
-                  },
-                  activeColor:  Colors.cyan,
-                  checkColor: Colors.white,
-                  controlAffinity:
-                      ListTileControlAffinity.platform, //  <-- leading Checkbox
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await NoteDatabase.instance.create(
-                        Note(
-                          isImportant: isImportant,
-                          isUrgent: isUrgent,
-                          number: widget.index + 1,
-                          description: descController.text,
-                          title: titleController.text,
-                          reminderDate: DateTime(0,0,0,0),
-                          createdTime: DateTime.now(),
-                        ),
-                      );
-                      Navigator.pop(context, false);
-                      refreshNote();
-                    }
-                  },
-                  child: const Text("Ajouter"),
-                  style: ElevatedButton.styleFrom(
-                    onPrimary: Colors.white,
-                    primary: Colors.cyan,
-                    elevation: 0.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black,
                     ),
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return "Ajouter une description";
+                      }
+                    },
+                    controller: descController,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      hintText: "Description",
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      border: InputBorder.none,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.black.withOpacity(0.05),
+                    ),
+                    maxLines: 5,
                   ),
-                )
-              ],
+                  CheckboxListTile(
+                    contentPadding: const EdgeInsets.all(1),
+                    dense: true,
+                    title: const Text(
+                      "Urgent",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 14,
+                      ),
+                    ),
+                    value: isUrgent,
+                    onChanged: (newValue) {
+                      FocusScope.of(context).unfocus();
+                      if (isImportant) {
+                        print('null');
+                      } else {
+                        setState(() {
+                          isUrgent = newValue!;
+                        });
+                      }
+                    },
+                    activeColor: Colors.red,
+                    checkColor: Colors.white,
+                    controlAffinity: ListTileControlAffinity
+                        .platform, //  <-- leading Checkbox
+                  ),
+                  CheckboxListTile(
+                    contentPadding: const EdgeInsets.all(1),
+                    dense: true,
+                    title: Text(
+                      "Important",
+                      style: TextStyle(
+                        color: isDark ? Colors.white : Colors.black,
+                        fontSize: 14,
+                      ),
+                    ),
+                    value: isImportant,
+                    onChanged: (newValue) {
+                      FocusScope.of(context).unfocus();
+                      if (isUrgent) {
+                        print('null');
+                      } else {
+                        setState(() {
+                          isImportant = newValue!;
+                        });
+                      }
+                    },
+                    activeColor: Colors.cyan,
+                    checkColor: Colors.white,
+                    controlAffinity: ListTileControlAffinity
+                        .platform, //  <-- leading Checkbox
+                  ),
+                  const SizedBox(
+                    height: 60,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await NoteDatabase.instance.create(
+                          Note(
+                            isImportant: isImportant,
+                            isUrgent: isUrgent,
+                            number: widget.index + 1,
+                            description: descController.text,
+                            title: titleController.text,
+                            reminderDate: DateTime(0, 0, 0, 0),
+                            createdTime: DateTime.now(),
+                          ),
+                        );
+                        Navigator.pop(context, false);
+                        refreshNote();
+                      }
+                    },
+                    child: const Text("Ajouter"),
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white,
+                      primary: Colors.cyan,
+                      elevation: 0.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

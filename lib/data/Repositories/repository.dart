@@ -9,7 +9,7 @@ class Repository {
   
   Future<void> fetchNotesData() async {
     final noteRaw = await networkService.fetchNotes();
-    print(noteRaw);
+    // print(noteRaw);
     // return noteRaw.map((e) => Note.fromJson(e)).toList();
   }
 }

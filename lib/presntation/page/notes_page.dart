@@ -1,22 +1,21 @@
 // ignore_for_file: unnecessary_this, prefer_const_constructors
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
+import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:whai_i_do/data/Database/note_database.dart';
 import 'package:whai_i_do/data/Models/Note.dart';
-import 'package:whai_i_do/data/Services/NotificationService.dart';
 import 'package:whai_i_do/data/cubit/note_cubit.dart';
 import 'package:whai_i_do/data/cubit/theme_cubit.dart';
 
 import 'package:whai_i_do/presntation/page/note_detail_page.dart';
 import 'package:whai_i_do/presntation/widget/new_note_form.dart';
 import 'package:whai_i_do/presntation/widget/note_card.dart';
-
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
 class NotePage extends StatefulWidget {
   const NotePage({Key? key}) : super(key: key);
@@ -92,9 +91,7 @@ class _NotePageState extends State<NotePage> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-               
-              },
+              onPressed: () {},
               icon: const Icon(
                 Icons.search,
                 // color: Colors.white,
@@ -102,71 +99,7 @@ class _NotePageState extends State<NotePage> {
             ),
           ],
         ),
-        drawer: BlocBuilder<ThemeCubit, ThemeState>(
-          builder: (context, ThemeState state) {
-            return Drawer(
-              elevation: 0.0,
-              child: Container(
-                decoration:
-                    BoxDecoration(color: isDark ? Colors.blueGrey[900] : null),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    DrawerHeader(
-                      // decoration: BoxDecoration(
-                      //   color: Colors.cyan,
-                      // ),
-                      child: Center(
-                        child: Text(
-                          'Zoknot',
-                          style: GoogleFonts.dancingScript(
-                              fontWeight: FontWeight.w100, fontSize: 60),
-                        ),
-                      ),
-                    ),
-                    SwitchListTile.adaptive(
-                      activeColor: Colors.cyan,
-                      title: Row(
-                        children: const [
-                          Icon(Icons.dark_mode
-                              // color: Colors.white,
-                              ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Thème sombre',
-                            style: TextStyle(
-                                // color: Colors.white,
-                                ),
-                          ),
-                        ],
-                      ),
-                      value: isDark,
-                      onChanged: (value) {
-                        themeCubit.toggleTheme();
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.settings,
-                        // color: Colors.white,
-                      ),
-                      title: const Text(
-                        'Paramètres',
-                        style: TextStyle(
-                            // color: Colors.white,
-                            ),
-                      ),
-                      onTap: () {
-                        // Update the state of the app.
-                        // ...
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+        drawer: CustomDrawer(isDark: isDark, themeCubit: themeCubit),
         body: Center(
           child: isLoading
               ? const CircularProgressIndicator.adaptive()
@@ -216,7 +149,6 @@ class _NotePageState extends State<NotePage> {
         this.index = index;
         return GestureDetector(
           onTap: () async {
-
             await Navigator.of(context).push(
               MaterialPageRoute(
                 fullscreenDialog: true,
@@ -230,6 +162,91 @@ class _NotePageState extends State<NotePage> {
           child: NoteCardWidget(
             note: note,
             index: index,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({
+    Key? key,
+    required this.isDark,
+    required this.themeCubit,
+  }) : super(key: key);
+
+  final bool isDark;
+  final ThemeCubit themeCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, ThemeState state) {
+        return Drawer(
+          elevation: 0.0,
+          child: Container(
+            decoration:
+                BoxDecoration(color: isDark ? Colors.blueGrey[900] : null),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  // decoration: BoxDecoration(
+                  //   color: Colors.cyan,
+                  // ),
+                  child: Center(
+                    child: Text(
+                      'Zoknot',
+                      style: GoogleFonts.dancingScript(
+                          fontWeight: FontWeight.w100, fontSize: 60),
+                    ),
+                  ),
+                ),
+                SwitchListTile.adaptive(
+                  activeColor: Colors.cyan,
+                  title: Row(
+                    children: const [
+                      Icon(Icons.dark_mode
+                          // color: Colors.white,
+                          ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Thème sombre',
+                        style: TextStyle(
+                            // color: Colors.white,
+                            ),
+                      ),
+                    ],
+                  ),
+                  value: isDark,
+                  onChanged: (value) {
+                    themeCubit.toggleTheme();
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.logout,
+                    // color: Colors.white,
+                  ),
+                  title: const Text(
+                    'Exit',
+                    style: TextStyle(
+                        // color: Colors.white,
+                        ),
+                  ),
+                  onTap: () {
+                    // Update the state of the app.
+                    // ...
+                    if (Platform.isAndroid) {
+                      SystemNavigator.pop();
+                    } else if (Platform.isIOS) {
+                      exit(0);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

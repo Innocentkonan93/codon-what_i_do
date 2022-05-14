@@ -9,7 +9,7 @@ import 'data/Services/NotificationService.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  MobileAds.instance.initialize(); 
   NotificationApi.init(initSchedule: true);
   runApp(const CustomBlocProvider());
 }

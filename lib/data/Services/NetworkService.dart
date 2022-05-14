@@ -11,10 +11,10 @@ class NetworkService{
   Future<List<dynamic>> fetchNotes() async{
     try {
       final response =await get(Uri.parse(baseURl + "/notes"));
-      print(jsonDecode(response.body));
+      // print(jsonDecode(response.body));
       return jsonDecode(response.body);
     }  catch (e) {
-      print(e);
+      // print(e);
       return [];
     }
   }
