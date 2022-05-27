@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:whai_i_do/App/AppRoutes.dart';
-import 'package:whai_i_do/data/cubit/theme_cubit.dart';
-import 'package:whai_i_do/data/dataprovider/CustomBlocProvider.dart';
+import 'package:zoknot/App/AppRoutes.dart';
+import 'package:zoknot/data/cubit/theme_cubit.dart';
+import 'package:zoknot/data/dataprovider/CustomBlocProvider.dart';
 import 'data/Services/NotificationService.dart';
 
 void main() async{

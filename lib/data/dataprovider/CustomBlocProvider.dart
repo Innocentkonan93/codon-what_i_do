@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:whai_i_do/App/AppRoutes.dart';
-import 'package:whai_i_do/data/cubit/theme_cubit.dart';
-import 'package:whai_i_do/main.dart';
+import 'package:zoknot/App/AppRoutes.dart';
+import 'package:zoknot/data/cubit/theme_cubit.dart';
+import 'package:zoknot/main.dart';
 
 class CustomBlocProvider extends StatelessWidget {
   const CustomBlocProvider({Key? key}) : super(key: key);

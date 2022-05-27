@@ -8,14 +8,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
-import 'package:whai_i_do/data/Database/note_database.dart';
-import 'package:whai_i_do/data/Models/Note.dart';
-import 'package:whai_i_do/data/cubit/note_cubit.dart';
-import 'package:whai_i_do/data/cubit/theme_cubit.dart';
+import 'package:zoknot/data/Database/note_database.dart';
+import 'package:zoknot/data/Models/Note.dart';
+import 'package:zoknot/data/cubit/note_cubit.dart';
+import 'package:zoknot/data/cubit/theme_cubit.dart';
 
-import 'package:whai_i_do/presntation/page/note_detail_page.dart';
-import 'package:whai_i_do/presntation/widget/new_note_form.dart';
-import 'package:whai_i_do/presntation/widget/note_card.dart';
+import 'package:zoknot/presntation/page/note_detail_page.dart';
+import 'package:zoknot/presntation/widget/new_note_form.dart';
+import 'package:zoknot/presntation/widget/note_card.dart';
+
+import '../widget/zoknot.dart';
 
 class NotePage extends StatefulWidget {
   const NotePage({Key? key}) : super(key: key);
@@ -91,7 +93,15 @@ class _NotePageState extends State<NotePage> {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return Zoknot();
+                    },
+                  ),
+                );
+              },
               icon: const Icon(
                 Icons.search,
                 // color: Colors.white,

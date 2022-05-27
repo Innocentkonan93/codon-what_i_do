@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:whai_i_do/data/Database/note_database.dart';
-import 'package:whai_i_do/data/Models/Note.dart';
-import 'package:whai_i_do/data/Services/NotificationService.dart';
-import 'package:whai_i_do/data/cubit/theme_cubit.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:zoknot/data/Database/note_database.dart';
+import 'package:zoknot/data/Models/Note.dart';
+import 'package:zoknot/data/cubit/theme_cubit.dart';
+
+import '../../data/Services/NotificationService.dart';
 
 class NewreminderForm extends StatefulWidget {
   final Note note;

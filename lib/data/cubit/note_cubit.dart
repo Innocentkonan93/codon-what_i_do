@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:whai_i_do/data/Repositories/repository.dart';
+import 'package:zoknot/data/Repositories/repository.dart';
 
 part 'note_state.dart';
 

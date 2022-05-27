@@ -2,13 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:whai_i_do/data/Services/NetworkService.dart';
-import 'package:whai_i_do/data/Repositories/repository.dart';
-import 'package:whai_i_do/data/cubit/note_cubit.dart';
-import 'package:whai_i_do/data/cubit/theme_cubit.dart';
-import 'package:whai_i_do/presntation/page/edit_note_page.dart';
-import 'package:whai_i_do/presntation/page/note_detail_page.dart';
-import 'package:whai_i_do/presntation/page/notes_page.dart';
+import 'package:zoknot/data/Services/NetworkService.dart';
+import 'package:zoknot/data/Repositories/repository.dart';
+import 'package:zoknot/data/cubit/note_cubit.dart';
+import 'package:zoknot/data/cubit/theme_cubit.dart';
+import 'package:zoknot/presntation/page/edit_note_page.dart';
+import 'package:zoknot/presntation/page/note_detail_page.dart';
+import 'package:zoknot/presntation/page/notes_page.dart';
 
 class AppRouter {
   late ThemeCubit themeCubit;

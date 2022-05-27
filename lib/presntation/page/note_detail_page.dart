@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
-import 'package:whai_i_do/data/Services/AdService.dart';
-import 'package:whai_i_do/data/cubit/theme_cubit.dart';
-import 'package:whai_i_do/presntation/widget/edit_police.dart';
-import 'package:whai_i_do/presntation/widget/new_reminder_form.dart';
+import 'package:zoknot/data/Services/AdService.dart';
+import 'package:zoknot/data/cubit/theme_cubit.dart';
+import 'package:zoknot/presntation/widget/edit_police.dart';
+import 'package:zoknot/presntation/widget/new_reminder_form.dart';
 import '../../data/Models/Note.dart';
 import '../../data/Database/note_database.dart';
 

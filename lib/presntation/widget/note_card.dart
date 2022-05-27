@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:whai_i_do/data/cubit/theme_cubit.dart';
+import 'package:zoknot/data/cubit/theme_cubit.dart';
 import '../../data/Models/Note.dart';
 
 class NoteCardWidget extends StatefulWidget {
@@ -28,20 +28,21 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
       padding: const EdgeInsets.all(5),
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-          color: widget.note.isImportant
-              ? Colors.orange[300]
-              : widget.note.isUrgent
-                  ? Colors.red[300]
-                  : Colors.cyan[200],
-          // borderRadius:
-          //     const BorderRadius.vertical(bottom: Radius.circular(12)),
-          boxShadow: const [
-            BoxShadow(
-                offset: Offset(-2, 2),
-                color: Colors.black38,
-                spreadRadius: 1,
-                blurRadius: 10)
-          ]),
+        color: widget.note.isImportant
+            ? Colors.orange[300]
+            : widget.note.isUrgent
+                ? Colors.red[300]
+                : Colors.cyan[200],
+        // borderRadius:
+        //     const BorderRadius.vertical(bottom: Radius.circular(12)),
+        boxShadow: const [
+          BoxShadow(
+              offset: Offset(-2, 2),
+              color: Colors.black38,
+              spreadRadius: 1,
+              blurRadius: 10)
+        ],
+      ),
       child: Center(
           child: Column(
         children: [

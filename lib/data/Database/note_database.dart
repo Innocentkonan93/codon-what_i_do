@@ -2,7 +2,7 @@
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:whai_i_do/data/Models/Note.dart';
+import 'package:zoknot/data/Models/Note.dart';
 
 class NoteDatabase {
   static final NoteDatabase instance = NoteDatabase._init();

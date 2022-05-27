@@ -1,5 +1,5 @@
-import 'package:whai_i_do/data/Models/Note.dart';
-import 'package:whai_i_do/data/Services/NetworkService.dart';
+import 'package:zoknot/data/Models/Note.dart';
+import 'package:zoknot/data/Services/NetworkService.dart';
 
 class Repository {
 

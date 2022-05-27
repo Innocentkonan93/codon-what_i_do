@@ -4,9 +4,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:whai_i_do/data/Database/note_database.dart';
-import 'package:whai_i_do/data/Models/Note.dart';
-import 'package:whai_i_do/data/cubit/theme_cubit.dart';
+import 'package:zoknot/data/Database/note_database.dart';
+import 'package:zoknot/data/Models/Note.dart';
+import 'package:zoknot/data/cubit/theme_cubit.dart';
 
 class NewNoteForm extends StatefulWidget {
   final int index;
