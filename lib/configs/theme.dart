@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 ThemeData theme() {
-  return ThemeData(
+  return ThemeData( 
     scaffoldBackgroundColor: const Color(0xFFe9eef4),
     fontFamily: 'Manrope',
     colorScheme: const ColorScheme(
