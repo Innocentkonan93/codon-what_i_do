@@ -16,10 +16,11 @@ class NewNoteSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
-      height: 350,
-      decoration: BoxDecoration(color: Colors.grey, boxShadow: [
+      height: MediaQuery.of(context).size.height / 2,
+      decoration: BoxDecoration(color: sheetColor, boxShadow: [
         BoxShadow(
           offset: const Offset(0, 1),
           color: Colors.black.withOpacity(0.16),
@@ -43,27 +44,25 @@ class NewNoteSheet extends StatelessWidget {
               );
             }),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Titre',
-              ),
-              style: GoogleFonts.signikaNegative(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
-              onChanged: onTitleChanged,
-            ),
-          ),
+         
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
+                    TextFormField(
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Titre',
+              ),
+              style: GoogleFonts.signikaNegative(
+                        fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+              onChanged: onTitleChanged,
+                    ),
                     TextFormField(
                       keyboardType: TextInputType.multiline,
                       maxLines: null,

@@ -1,35 +1,32 @@
+import 'package:zoknot/database/database.dart';
+
 import '../models/note_model.dart';
 import 'base_note_repository.dart';
 
 class NoteRepository extends BaseNoteRepository {
+  NewNoteDatabase noteDatabase = NewNoteDatabase.instance;
   @override
   Future<NoteModel> create(NoteModel note) {
-    // TODO: implement create
-    throw UnimplementedError();
+    return noteDatabase.create(note);
   }
 
   @override
   Future<int> deleteNote(NoteModel note) {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+    return noteDatabase.deleteNote(note);
   }
 
   @override
   Future<List<NoteModel>> readAllNotes() {
-    // TODO: implement readAllNotes
-    throw UnimplementedError();
+    return noteDatabase.readAllNotes();
   }
 
   @override
   Future<NoteModel?> readNote(int id) {
-    // TODO: implement readNote
-    throw UnimplementedError();
+    return noteDatabase.readNote(id);
   }
 
   @override
   Future<int> updateNote(NoteModel note) {
-    // TODO: implement updateNote
-    throw UnimplementedError();
+    return noteDatabase.updateNote(note);
   }
-
 }

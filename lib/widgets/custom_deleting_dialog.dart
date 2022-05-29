@@ -1,16 +1,16 @@
-
 import 'package:flutter/material.dart';
+import 'package:zoknot/models/note_model.dart';
 
 class CustomDeletingDialog extends StatelessWidget {
   const CustomDeletingDialog({
+    required this.note,
     Key? key,
-    required this.size,
   }) : super(key: key);
-
-  final Size size;
+  final NoteModel note;
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
@@ -18,7 +18,7 @@ class CustomDeletingDialog extends StatelessWidget {
         height: size.height / 2,
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
         decoration: BoxDecoration(
-          color: Colors.grey,
+          color: Theme.of(context).colorScheme.background,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -27,12 +27,16 @@ class CustomDeletingDialog extends StatelessWidget {
               width: size.width * 0.45,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Flexible(
                     child: Text(
                       "Êtes-vous sûr ce vouloir supprimer la note ?",
                       maxLines: 2,
                       textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5!
+                          .copyWith(color: Colors.white),
                     ),
                   )
                 ],
@@ -48,12 +52,11 @@ class CustomDeletingDialog extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     width: 250,
                     height: double.infinity,
-                    color: Colors.white,
+                    color: Color(int.parse(note.noteColor)),
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: List.generate(20, (index) {
                             if (index.isOdd) {
                               return Container(
@@ -81,13 +84,17 @@ class CustomDeletingDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton(
-                    child: Text("Non"),
-                    onPressed: () {},
+                    child: const Text("Non"),
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
                   ),
                   const VerticalDivider(),
                   TextButton(
-                    child: Text("Oui"),
-                    onPressed: () {},
+                    child: const Text("Oui"),
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
                   ),
                 ],
               ),

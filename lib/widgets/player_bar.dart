@@ -1,11 +1,94 @@
+import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class PlayerBar extends StatelessWidget {
+class PlayerBar extends StatefulWidget {
   const PlayerBar({
+    required this.musicFile,
     Key? key,
   }) : super(key: key);
+
+  final File musicFile;
+
+  @override
+  State<PlayerBar> createState() => _PlayerBarState();
+}
+
+class _PlayerBarState extends State<PlayerBar> {
+  final audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+
+  @override
+  void initState() {
+    setAudio();
+    //listen to audioplayer state
+    listen();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
+  String formatTime(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes);
+    final seconds = twoDigits(duration.inSeconds);
+    return [if (duration.inHours > 0) hours, minutes, seconds].join(':');
+  }
+
+  void listen() {
+    audioPlayer.onPlayerStateChanged.listen((state) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        isPlaying = state == PlayerState.PLAYING;
+      });
+    });
+
+    // listen the duration
+    audioPlayer.onDurationChanged.listen((newDuration) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        duration = newDuration;
+      });
+    });
+
+// listen the audio position
+
+    audioPlayer.onAudioPositionChanged.listen((newPosition) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        position = newPosition;
+      });
+    });
+  }
+
+  Future setAudio() async {
+    audioPlayer.setReleaseMode(ReleaseMode.LOOP);
+
+    // final result = await FilePicker.platform.pickFiles();
+
+    if (widget.musicFile != null) {
+      final file = File(widget.musicFile.path);
+
+      audioPlayer.setUrl(file.path, isLocal: true);
+      print(file.path);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,27 +117,53 @@ class PlayerBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Row(
-                  children: const [
+                  children: [
                     Text(
                       'Instrumental.mp3',
-                      style: TextStyle(fontSize: 11),
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption!
+                          .copyWith(color: Colors.white),
                     ),
                   ],
                 ),
-                const LinearProgressIndicator(
-                  value: 1,
-                  minHeight: 3,
+                Flexible(
+                  child: SliderTheme(
+                    data: const SliderThemeData(
+                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+                      thumbColor: Colors.white,
+                    ),
+                    child: Slider(
+                      min: 0,
+                      max: duration.inSeconds.toDouble(),
+                      value: position.inSeconds.toDouble(),
+                      onChanged: (val) async {
+                        final position = Duration(seconds: val.toInt());
+                        await audioPlayer.seek(position);
+
+                        //
+                        await audioPlayer.resume();
+                      },
+                    ),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
-                      "0:0",
-                      style: TextStyle(fontSize: 9),
+                      formatTime(position),
+                      // "0:0",
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption!
+                          .copyWith(color: Colors.white),
                     ),
                     Text(
-                      "3:42",
-                      style: TextStyle(fontSize: 9),
+                      "${duration.inMinutes}: ${duration.inSeconds}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption!
+                          .copyWith(color: Colors.white),
                     ),
                   ],
                 )
@@ -63,15 +172,46 @@ class PlayerBar extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           CircleAvatar(
+            radius: 17,
             backgroundColor: Colors.white,
-            child: SvgPicture.asset('assets/icons/play.svg',
-                color: Colors.black),
+            child: TextButton(
+              onPressed: () async {
+                if (isPlaying) {
+                  print('play');
+                  await audioPlayer.pause();
+                } else {
+                  await audioPlayer.resume();
+                }
+              },
+              child: Center(
+                child: isPlaying
+                    ? SvgPicture.asset(
+                        'assets/icons/pause.svg',
+                        color: Colors.black,
+                        height: 20,
+                        width: 20,
+                      )
+                    : SvgPicture.asset(
+                        'assets/icons/play.svg',
+                        color: Colors.black,
+                        height: 20,
+                        width: 20,
+                      ),
+              ),
+            ),
           ),
           const SizedBox(width: 10),
           CircleAvatar(
+            radius: 17,
             backgroundColor: Colors.white,
-            child: SvgPicture.asset('assets/icons/rotate-cw.svg',
-                color: Colors.black),
+            child: Center(
+              child: SvgPicture.asset(
+                'assets/icons/rotate-cw.svg',
+                color: Colors.black,
+                height: 20,
+                width: 20,
+              ),
+            ),
           )
         ],
       ),

@@ -79,18 +79,18 @@ class NoteModel extends Equatable {
     };
   }
 
-  factory NoteModel.fromJson(Map<String, Object?> json) {
+  factory NoteModel.fromJson(Map<String, dynamic> json) {
     return NoteModel(
       id: json[NoteFields.id] as int?,
       noteTitle: json[NoteFields.noteTitle] as String,
       noteBody: json[NoteFields.noteBody] as String,
       noteFilePath: json[NoteFields.noteFilePath] as String,
       noteColor: json[NoteFields.noteColor] as String,
-      noteNumber: json[NoteFields.noteNumber] as int,
+      noteNumber:  int.parse(json[NoteFields.noteNumber]),
       noteReminderDate:
-          DateTime.parse(json[NoteFields.noteReminderDate] as String),
+          DateTime.parse(json[NoteFields.noteReminderDate]),
       noteCreatedDate:
-          DateTime.parse(json[NoteFields.noteCreatedDate] as String),
+          DateTime.parse(json[NoteFields.noteCreatedDate]),
     );
   }
 

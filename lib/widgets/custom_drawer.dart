@@ -14,6 +14,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 0.0,
+      backgroundColor: Theme.of(context).colorScheme.background,
       child: Container(
         decoration: BoxDecoration(),
         child: Column(
@@ -39,11 +40,9 @@ class CustomDrawer extends StatelessWidget {
                     "assets/icons/moon.svg",
                     color: Colors.white,
                   ),
-                  title: const Text(
+                  title: Text(
                     'Thème sombre',
-                    style: TextStyle(
-                        // color: Colors.white,
-                        ),
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                   trailing: Switch.adaptive(
                     value: true,
@@ -55,11 +54,9 @@ class CustomDrawer extends StatelessWidget {
                     "assets/icons/share-2.svg",
                     color: Colors.white,
                   ),
-                  title: const Text(
+                  title: Text(
                     'Partager à un ami',
-                    style: TextStyle(
-                        // color: Colors.white,
-                        ),
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                   onTap: () {
                     exit(0);
@@ -70,11 +67,9 @@ class CustomDrawer extends StatelessWidget {
                     "assets/icons/log-out.svg",
                     color: Colors.white,
                   ),
-                  title: const Text(
+                  title: Text(
                     'Quitter l\'app',
-                    style: TextStyle(
-                        // color: Colors.white,
-                        ),
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                   onTap: () {
                     // Update the state of the app.

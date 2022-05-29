@@ -3,10 +3,14 @@ import 'package:flutter_svg/svg.dart';
 
 class CustomTextStylePanel extends StatelessWidget {
   CustomTextStylePanel({
+    required this.textStyle,
+    required this.textAlign,
     Key? key,
   }) : super(key: key);
-
+  final TextStyle textStyle;
+  final TextAlign textAlign;
   List<String> textStyleIcon = [
+    
     "assets/icons/align-center.svg",
     "assets/icons/align-justify.svg",
     "assets/icons/align-right.svg",
@@ -23,9 +27,9 @@ class CustomTextStylePanel extends StatelessWidget {
       builder: (context) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
-          decoration: const BoxDecoration(
-            // color: Colors.white,
-            borderRadius: BorderRadius.vertical(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.background,
+            borderRadius: const BorderRadius.vertical(
               top: Radius.circular(30),
             ),
           ),
@@ -48,10 +52,14 @@ class CustomTextStylePanel extends StatelessWidget {
               const SizedBox(height: 30),
               Row(
                 children: [
-                  const Text("Taille"),
-                  const Expanded(
-                    flex: 2,
-                    child: SizedBox(),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      "Taille de police",
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
                   ),
                   Expanded(
                     flex: 5,
@@ -66,20 +74,32 @@ class CustomTextStylePanel extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.white,
-                            child:
-                                SvgPicture.asset("assets/icons/arrow-left.svg"),
+                            child: SvgPicture.asset(
+                              "assets/icons/arrow-left.svg",
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
-                          const Expanded(
+                          Expanded(
                             child: SizedBox(
                               child: Center(
-                                child: Text("14"),
+                                child: Text(
+                                  textStyle.fontSize.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5!
+                                      .copyWith(
+                                        color: Colors.white,
+                                      ),
+                                ),
                               ),
                             ),
                           ),
                           CircleAvatar(
                             backgroundColor: Colors.white,
                             child: SvgPicture.asset(
-                                "assets/icons/arrow-right.svg"),
+                              "assets/icons/arrow-right.svg",
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
                         ],
                       ),

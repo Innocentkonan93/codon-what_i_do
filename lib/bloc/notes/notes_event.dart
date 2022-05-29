@@ -9,12 +9,7 @@ abstract class NotesEvent extends Equatable {
 
 // ? Load
 class LoadNotes extends NotesEvent {
-  final List<NoteModel> notes;
 
-  const LoadNotes({required this.notes});
-
-  @override
-  List<Object> get props => [notes];
 }
 
 //? Update
@@ -29,7 +24,7 @@ class UpdateNotes extends NotesEvent {
 
 //? Load single Note
 class LoadSingleNote extends NotesEvent {
-  final String noteId;
+  final int noteId;
 
   const LoadSingleNote({required this.noteId});
 
