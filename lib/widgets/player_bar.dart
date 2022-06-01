@@ -92,128 +92,148 @@ class _PlayerBarState extends State<PlayerBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      height: 50,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withOpacity(0.56),
-        boxShadow: [],
-        // gradient: const LinearGradient(
-        //   begin: Alignment.topCenter,
-        //   end: Alignment.bottomCenter,
-        //   stops: [0.3, 0.6, 0.9],
-        //   colors: [
-        //     Colors.black12,
-        //     Colors.transparent,
-        //     Colors.black12,
-        //   ],
-        // ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Instrumental.mp3',
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption!
-                          .copyWith(color: Colors.white),
-                    ),
-                  ],
-                ),
-                Flexible(
-                  child: SliderTheme(
-                    data: const SliderThemeData(
-                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
-                      thumbColor: Colors.white,
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: duration.inSeconds.toDouble(),
-                      value: position.inSeconds.toDouble(),
-                      onChanged: (val) async {
-                        final position = Duration(seconds: val.toInt());
-                        await audioPlayer.seek(position);
+    return Dismissible(
+      direction: DismissDirection.horizontal,
+      key: ValueKey(widget.musicFile),
+      onDismissed: (direction) {
+        print(direction);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+        height: 50,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.56),
+          // boxShadow: [],
+          // gradient: const LinearGradient(
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          //   stops: [0.3, 0.6, 0.9],
+          //   colors: [
+          //     Colors.black12,
+          //     Colors.transparent,
+          //     Colors.black12,
+          //   ],
+          // ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          widget.musicFile.path.split('/').last,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Flexible(
+                    child: SliderTheme(
+                      data: const SliderThemeData(
+                        thumbShape:
+                            RoundSliderThumbShape(enabledThumbRadius: 5),
+                        thumbColor: Colors.white,
+                      ),
+                      child: Slider(
+                        min: 0,
+                        max: duration.inSeconds.toDouble(),
+                        value: position.inSeconds.toDouble(),
+                        onChanged: (val) async {
+                          final position = Duration(seconds: val.toInt());
+                          await audioPlayer.seek(position);
 
-                        //
-                        await audioPlayer.resume();
-                      },
+                          //
+                          await audioPlayer.resume();
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      formatTime(position),
-                      // "0:0",
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption!
-                          .copyWith(color: Colors.white),
-                    ),
-                    Text(
-                      "${duration.inMinutes}: ${duration.inSeconds}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption!
-                          .copyWith(color: Colors.white),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          CircleAvatar(
-            radius: 17,
-            backgroundColor: Colors.white,
-            child: TextButton(
-              onPressed: () async {
-                if (isPlaying) {
-                  print('play');
-                  await audioPlayer.pause();
-                } else {
-                  await audioPlayer.resume();
-                }
-              },
-              child: Center(
-                child: isPlaying
-                    ? SvgPicture.asset(
-                        'assets/icons/pause.svg',
-                        color: Colors.black,
-                        height: 20,
-                        width: 20,
-                      )
-                    : SvgPicture.asset(
-                        'assets/icons/play.svg',
-                        color: Colors.black,
-                        height: 20,
-                        width: 20,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        formatTime(position),
+                        // "0:0",
+                        style: Theme.of(context).textTheme.caption!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ),
                       ),
+                      Text(
+                        "${duration.inMinutes}: ${duration.inSeconds}",
+                        style: Theme.of(context).textTheme.caption!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
-          ),
-          const SizedBox(width: 10),
-          CircleAvatar(
-            radius: 17,
-            backgroundColor: Colors.white,
-            child: Center(
-              child: SvgPicture.asset(
-                'assets/icons/rotate-cw.svg',
-                color: Colors.black,
-                height: 20,
-                width: 20,
+            const SizedBox(width: 10),
+            CircleAvatar(
+              radius: 17,
+              backgroundColor: Colors.white,
+              child: TextButton(
+                onPressed: () async {
+                  if (isPlaying) {
+                    print('play');
+                    await audioPlayer.pause();
+                  } else {
+                    await audioPlayer.resume();
+                  }
+                },
+                child: Center(
+                  child: isPlaying
+                      ? SvgPicture.asset(
+                          'assets/icons/pause.svg',
+                          color: Colors.black,
+                          height: 20,
+                          width: 20,
+                        )
+                      : SvgPicture.asset(
+                          'assets/icons/play.svg',
+                          color: Colors.black,
+                          height: 20,
+                          width: 20,
+                        ),
+                ),
               ),
             ),
-          )
-        ],
+            const SizedBox(width: 10),
+            CircleAvatar(
+              radius: 17,
+              backgroundColor: Colors.white,
+              child: TextButton(
+                onPressed: () async {
+                  if (isPlaying) {
+                    await audioPlayer.stop();
+                    audioPlayer.resume();
+                  }
+                },
+                child: Center(
+                  child: SvgPicture.asset(
+                    'assets/icons/rotate-cw.svg',
+                    color: Colors.black,
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

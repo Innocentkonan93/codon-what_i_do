@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:zoknot/models/note_model.dart';
 import 'package:zoknot/widgets/widgets.dart';
 
@@ -30,21 +31,29 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
         return PopupMenuButton(
           icon: SvgPicture.asset(
             "assets/icons/more-vertical.svg",
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
           itemBuilder: (context) {
             return [
               PopupMenuItem(
                 value: "police",
                 child: Row(
-                  children: const [
+                  children: [
                     Text(
                       'Aa',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onBackground),
                     ),
-                    SizedBox(width: 25),
-                    Expanded(child: Text("Modifier la police"))
+                    const SizedBox(width: 25),
+                    Expanded(
+                      child: Text(
+                        "Modifier la police",
+                        style: Theme.of(context).textTheme.headline5!.copyWith(
+                            color: Theme.of(context).colorScheme.onBackground),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -53,9 +62,14 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                 child: Row(
                   children: [
                     SvgPicture.asset("assets/icons/share-2.svg",
-                        color: Colors.white),
+                        color: Theme.of(context).colorScheme.onBackground),
                     const SizedBox(width: 25),
-                    const Expanded(child: Text("Partager la note"))
+                    Expanded(
+                        child: Text(
+                      "Partager la note",
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground),
+                    ))
                   ],
                 ),
               ),
@@ -64,9 +78,13 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                 child: Row(
                   children: [
                     SvgPicture.asset("assets/icons/clock.svg",
-                        color: Colors.white),
+                        color: Theme.of(context).colorScheme.onBackground),
                     const SizedBox(width: 25),
-                    const Text("Ajouter un rappel")
+                    Text(
+                      "Ajouter un rappel",
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground),
+                    )
                   ],
                 ),
               ),
@@ -75,9 +93,16 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                 child: Row(
                   children: [
                     SvgPicture.asset("assets/icons/trash-2.svg",
-                        color: Colors.white),
+                        color: Theme.of(context).colorScheme.error),
                     const SizedBox(width: 25),
-                    const Expanded(child: Text("Supprimer la note"))
+                    Expanded(
+                        child: Text(
+                      "Supprimer la note",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5!
+                          .copyWith(color: Theme.of(context).colorScheme.error),
+                    ))
                   ],
                 ),
               ),
@@ -102,12 +127,14 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
             }
 
             if (val == "police") {
-              showModalBottomSheet(
+              final result = showModalBottomSheet(
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(30),
                   ),
                 ),
+                isDismissible: false,
+                enableDrag: false,
                 context: context,
                 builder: (context) {
                   return CustomTextStylePanel(
@@ -117,6 +144,14 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                     textAlign: TextAlign.left,
                   );
                 },
+              );
+              result.then((value) => print(value));
+            }
+
+            if (val == "share") {
+              Share.share(
+                "${widget.note.noteTitle}\n\n${widget.note.noteBody}",
+                subject: "Partage de : \n ${widget.note.noteTitle}",
               );
             }
           },

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zoknot/models/note_model.dart';
 import 'package:zoknot/widgets/widgets.dart';
 
-class NotesGrid extends StatelessWidget {
-  const NotesGrid({
+class SearchSuggestionGrid extends StatelessWidget {
+  const SearchSuggestionGrid({
     Key? key,
     required this.notes,
     required this.isGrid,
@@ -16,7 +16,7 @@ class NotesGrid extends StatelessWidget {
     return notes.isEmpty
         ? Center(
             child: Text(
-              'Vous n\'avez aucune note',
+              'Aucune note trouvée',
               style: Theme.of(context).textTheme.headline6!,
             ),
           )

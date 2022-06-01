@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zoknot/models/note_model.dart';
 
 class CustomDeletingDialog extends StatelessWidget {
@@ -12,6 +13,9 @@ class CustomDeletingDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       insetPadding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
         width: double.infinity,
@@ -30,7 +34,7 @@ class CustomDeletingDialog extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      "Êtes-vous sûr ce vouloir supprimer la note ?",
+                      "Êtes-vous sûr de vouloir supprimer la note ?",
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
@@ -70,6 +74,38 @@ class CustomDeletingDialog extends StatelessWidget {
                             );
                           }),
                         ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 2, 10, 5),
+                            child: Column(
+                              children: [
+                                Text(
+                                  note.noteTitle,
+                                  style: GoogleFonts.signikaNegative(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF263238),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    note.noteBody,
+                                    overflow: TextOverflow.fade,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6!
+                                        .copyWith(
+                                          color: const Color(0xFF263238),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          height: 1.5,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -84,14 +120,25 @@ class CustomDeletingDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton(
-                    child: const Text("Non"),
+                    child: Text(
+                      "Non",
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
                     onPressed: () {
                       Navigator.pop(context, false);
                     },
                   ),
                   const VerticalDivider(),
                   TextButton(
-                    child: const Text("Oui"),
+                    child: Text(
+                      "Oui",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5!
+                          .copyWith(color: Theme.of(context).colorScheme.error),
+                    ),
                     onPressed: () {
                       Navigator.pop(context, true);
                     },

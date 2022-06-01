@@ -1,6 +1,6 @@
 import 'package:zoknot/database/database.dart';
 
-import '../models/note_model.dart';
+import '../../models/note_model.dart';
 import 'base_note_repository.dart';
 
 class NoteRepository extends BaseNoteRepository {

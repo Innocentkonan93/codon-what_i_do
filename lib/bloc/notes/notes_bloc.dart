@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:zoknot/repositories/note_repository.dart';
+import 'package:flutter/foundation.dart';
+import 'package:zoknot/repositories/note/note_repository.dart';
 
 import '../../models/note_model.dart';
 
@@ -25,7 +26,9 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   void _onLoadNotes(LoadNotes event, Emitter<NotesState> emit) async {
     try {
+      if (kDebugMode) {
       print('notes loading');
+      }
       emit(NotesLoading());
       _noteSusbscription?.cancel();
       _noteSusbscription =
@@ -33,22 +36,30 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         add(UpdateNotes(notes: notes));
       });
     } catch (_) {
-      print(_);
+      if (kDebugMode) {
+        print(_);
+      }
     }
   }
 
   void _onUpdateNotes(UpdateNotes event, Emitter<NotesState> emit) async {
     try {
-      print('notes loaded');
+      if (kDebugMode) {
+        print('notes loaded');
+      }
       emit(NotesLoaded(notes: event.notes));
     } catch (_) {
-      print(_);
+      if (kDebugMode) {
+        print(_);
+      }
     }
   }
 
   void _onLoadSingleNote(LoadSingleNote event, Emitter<NotesState> emit) async {
     try {
-      print('note loaded');
+      if (kDebugMode) {
+        print('note loaded');
+      }
       _noteSusbscription?.cancel();
 
       _noteSusbscription =
@@ -56,7 +67,9 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         add(LoadNotes());
       });
     } catch (_) {
-      print(_);
+      if (kDebugMode) {
+        print(_);
+      }
     }
   }
 
@@ -71,11 +84,26 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         } else {}
       });
     } catch (_) {
-      print(_);
+      if (kDebugMode) {
+        print(_);
+      }
     }
   }
 
-  void _onEditNote(EditNote event, Emitter<NotesState> emit) {}
+  void _onEditNote(EditNote event, Emitter<NotesState> emit) {
+    try {
+      _noteSusbscription?.cancel();
+
+      _noteSusbscription =
+          _noteRepository.updateNote(event.note).asStream().listen((noteid) {
+        add(LoadNotes());
+      });
+    } catch (_) {
+      if (kDebugMode) {
+        print(_);
+      }
+    }
+  }
 
   void _onDeleteNote(DeleteNote event, Emitter<NotesState> emit) {
     try {
@@ -86,7 +114,9 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         add(LoadNotes());
       });
     } catch (_) {
-      print(_);
+      if (kDebugMode) {
+        print(_);
+      }
     }
   }
 }

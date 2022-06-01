@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:zoknot/bloc/colors/sheet_color_bloc.dart';
 import 'package:zoknot/models/note_model.dart';
 import 'package:zoknot/widgets/widgets.dart';
 
@@ -22,72 +23,85 @@ class AddNoteScreen extends StatefulWidget {
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
   int? index;
+  String? sheetColor;
+
+  FocusNode focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Color sheetColor = Theme.of(context).colorScheme.primary;
-    NoteModel note = NoteModel(
-      noteTitle: "",
-      noteBody: "",
-      noteFilePath: "",
-      noteColor: "0xFFf39591",
-      noteNumber: index != null ? index! : 0,
-      noteReminderDate: DateTime.now(),
-      noteCreatedDate: DateTime.now(),
-    );
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            BlocConsumer<NotesBloc, NotesState>(
-              listener: (context, state) {
-                if (state is NotesLoaded) {
-                  Navigator.pop(context);
-                }
-              },
-              builder: (context, state) {
-                return TextButton(
-                  onPressed: () {
-                    context.read<NotesBloc>().add(
-                          AddNote(note: note),
-                        );
-                  },
-                  child: SvgPicture.asset(
-                    "assets/icons/check.svg",
-                    color: Theme.of(context).colorScheme.primary,
+    return BlocBuilder<SheetColorBloc, SheetColorState>(
+      builder: (context, colorstate) {
+        String noteColor = (colorstate as SheetColorLoaded).colorString;
+        return BlocConsumer<NotesBloc, NotesState>(
+          listener: (context, notestate) {
+            if (notestate is NotesLoaded) {
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, notestate) {
+            NoteModel note = NoteModel(
+              noteTitle: "",
+              noteBody: "",
+              noteFilePath: "",
+              noteColor: noteColor,
+              noteNumber: index != null ? index! : 0,
+              noteReminderDate: DateTime.now(),
+              noteCreatedDate: DateTime.now(),
+            );
+            return Scaffold(
+              appBar: AppBar(
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      context.read<NotesBloc>().add(
+                            AddNote(note: note),
+                          );
+                    },
+                    child: SvgPicture.asset(
+                      "assets/icons/check.svg",
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
-                );
-              },
-            )
-          ],
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                NewNoteSheet(
-                  sheetColor: Color(int.parse(note.noteColor)),
-                  textStyle: TextStyle(),
-                  onTitleChanged: (title) {
-                    note = note.copyWith(noteTitle: title);
-                  },
-                  onBodyChanged: (body) {
-                    note = note.copyWith(noteBody: body);
-                  },
-                )
-              ],
-            ),
-          ),
-        ),
-        bottomSheet: CustomBottomSheet(
-          sheetColor: sheetColor,
-        ),
-      ),
+                ],
+              ),
+              backgroundColor: Theme.of(context).colorScheme.background,
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      NewNoteSheet(
+                        textStyle: const TextStyle(),
+                        focusNode: focusNode,
+                        onTitleChanged: (title) {
+                          note = note.copyWith(noteTitle: title);
+                          print(title);
+                        },
+                        onBodyChanged: (body) {
+                          note = note.copyWith(noteBody: body);
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              bottomSheet: SafeArea(
+                child: CustomBottomSheet(
+                  note: note,
+                  focusNode: focusNode,
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

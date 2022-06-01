@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isGrid = true;
   @override
   void initState() {
     BlocProvider.of<NotesBloc>(context).add(LoadNotes());
@@ -31,12 +32,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              showSearch(context: context, delegate: CustomSearchDelegate());
+            },
             child: SvgPicture.asset(
               "assets/icons/search.svg",
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onBackground,
             ),
           )
         ],
@@ -70,6 +74,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Mes productions',
                   style: Theme.of(context).textTheme.headline2,
                 ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isGrid = !isGrid;
+                    });
+                  },
+                  child: Icon(
+                    Icons.art_track_rounded,
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                )
               ],
             ),
           ),
@@ -84,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (state is NotesLoaded) {
                   print(state.notes.length);
                   return NotesGrid(
-                    isGrid: true,
+                    isGrid: isGrid,
                     notes: state.notes,
                   );
                 }

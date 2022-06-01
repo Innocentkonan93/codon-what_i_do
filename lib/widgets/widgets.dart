@@ -7,4 +7,6 @@ export 'custom_text_style_panel.dart';
 export 'custom_drawer.dart';
 export 'notes_grid.dart';
 export 'note_sheet.dart';
-export 'music_player.dart';
+export 'custom_search_delegate.dart';
+export 'color_panel.dart';
+export 'search_suggestion_grid.dart';

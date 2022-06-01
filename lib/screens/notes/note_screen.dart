@@ -4,10 +4,10 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zoknot/models/note_model.dart';
-import 'package:zoknot/widgets/custom_popup_menu.dart';
-
+import 'package:zoknot/screens/notes/edit_note_screen.dart';
 import '../../database/database.dart';
 import '../../services/AdService.dart';
 import '../../widgets/widgets.dart';
@@ -33,6 +33,7 @@ class NoteScreen extends StatefulWidget {
 }
 
 class _NoteScreenState extends State<NoteScreen> {
+  bool isEditView = false;
   final audioPlayer = AudioPlayer();
   late BannerAd _bottomBannerAd;
   NoteModel? note;
@@ -85,101 +86,145 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? const Center(
-            child: CircularProgressIndicator.adaptive(),
-          )
-        : Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            appBar: AppBar(
-              actions: [
-                TextButton(
-                  onPressed: () {},
-                  child: SvgPicture.asset(
-                    "assets/icons/edit-2.svg",
-                    // color: Theme.of(context).colorScheme.primary,
-                    color: Colors.white,
-                  ),
-                ),
-                TextButton(
-                  // onPressed: setAudio,
-                  onPressed: () async {
-                    final result = await FilePicker.platform.pickFiles();
+    return isEditView
+        ? EditNoteView(note: note!)
 
-                    if (result != null) {
-                      setState(() {
-                        musicFile = File(result.files.first.path!);
-                        NewNoteDatabase.instance.updateNote(note!
-                            .copyWith(noteFilePath: result.files.first.path));
-                      });
-                      refreshNote();
-                    }
-                  },
+        // ! A review this part of code for later
+        : isLoading
+            ? Center(
+                child: Container(
+                  color: Theme.of(context).colorScheme.background,
+                  // child: const CircularProgressIndicator.adaptive(),
+                ),
+              )
+            : Scaffold(
+                backgroundColor: Theme.of(context).colorScheme.background,
+                appBar: AppBar(
+                  backgroundColor: Theme.of(context).colorScheme.background,
 
-                  child: SvgPicture.asset(
-                    "assets/icons/music.svg",
-                    // color: Theme.of(context).colorScheme.primary,
-                    color: note!.noteFilePath == ""
-                        ? Colors.white
-                        : Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                CustomPopuMenu(
-                  note: note!,
-                )
-              ],
-            ),
-            body: Column(
-              children: [
-                // PlayerWidget(),
-                if (note!.noteFilePath != "")
-                  PlayerBar(musicFile: File(note!.noteFilePath!)),
-                // if (musicFile != null) PlayerBar(musicFile: musicFile!),
-                Flexible(
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    color: Color(int.parse(note!.noteColor)),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: List.generate(30, (index) {
-                              if (index.isOdd) {
-                                return Container(
-                                  width: 3,
-                                  // color: Colors.blueGrey[900],
-                                );
-                              }
-                              return CircleAvatar(
-                                radius: 7,
-                                backgroundColor: Colors.blueGrey[900],
-                              );
-                            }),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(note!.noteFilePath.toString()),
-                          ),
-                        ),
-                      ],
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          isEditView = true;
+                        });
+                      },
+                      child: SvgPicture.asset(
+                        "assets/icons/edit-2.svg",
+                        // color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-            bottomNavigationBar: _isBottomBannerAdLoaded
-                ? SizedBox(
-                    height: _bottomBannerAd.size.height.toDouble(),
-                    width: _bottomBannerAd.size.width.toDouble(),
-                    child: AdWidget(
-                      ad: _bottomBannerAd,
+                    TextButton(
+                      // onPressed: setAudio,
+                      onPressed: () async {
+                        final result = await FilePicker.platform.pickFiles();
+
+                        if (result != null) {
+                          setState(() {
+                            musicFile = File(result.files.first.path!);
+                            NewNoteDatabase.instance.updateNote(note!.copyWith(
+                                noteFilePath: result.files.first.path));
+                          });
+                          refreshNote();
+                        }
+                      },
+
+                      child: SvgPicture.asset(
+                        "assets/icons/music.svg",
+                        // color: Theme.of(context).colorScheme.primary,
+                        color: note!.noteFilePath == ""
+                            ? Theme.of(context).colorScheme.onBackground
+                            : Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  )
-                : null,
-          );
+                    CustomPopuMenu(
+                      note: note!,
+                    )
+                  ],
+                ),
+                body: Column(
+                  children: [
+                    // PlayerWidget(),
+                    if (note!.noteFilePath != "")
+                      PlayerBar(
+                        musicFile: File(note!.noteFilePath!),
+                      ),
+                    // if (musicFile != null) PlayerBar(musicFile: musicFile!),
+                    Flexible(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 4, vertical: 6),
+                        color: Color(int.parse(note!.noteColor)),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 3, 8),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: List.generate(30, (index) {
+                                  if (index.isOdd) {
+                                    return Container(
+                                      width: 3,
+                                      // color: Colors.blueGrey[900],
+                                    );
+                                  }
+                                  return CircleAvatar(
+                                      radius: 7,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .background);
+                                }),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 2, 10, 0),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        note!.noteTitle,
+                                        style: GoogleFonts.signikaNegative(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color(0xFF263238),
+                                        ),
+                                      ),
+                                      SelectableText(
+                                        note!.noteBody,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
+                                            .copyWith(
+                                              color: const Color(0xFF263238),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              height: 2.4,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                bottomNavigationBar: _isBottomBannerAdLoaded
+                    ? SizedBox(
+                        height: _bottomBannerAd.size.height.toDouble(),
+                        width: _bottomBannerAd.size.width.toDouble(),
+                        child: AdWidget(
+                          ad: _bottomBannerAd,
+                        ),
+                      )
+                    : null,
+              );
   }
 }

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:zoknot/models/note_model.dart';
 
 import '../bloc/colors/sheet_color_bloc.dart';
 
-class NewNoteSheet extends StatelessWidget {
-  const NewNoteSheet({
+class EditNoteSheet extends StatelessWidget {
+  const EditNoteSheet({
+    required this.note,
     required this.textStyle,
     required this.focusNode,
     required this.onTitleChanged,
     required this.onBodyChanged,
     Key? key,
   }) : super(key: key);
+  final NoteModel note;
   final TextStyle textStyle;
   final FocusNode focusNode;
   final Function(String)? onTitleChanged;
@@ -19,13 +22,16 @@ class NewNoteSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size.height;
+    // final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     return BlocBuilder<SheetColorBloc, SheetColorState>(
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
-          height: MediaQuery.of(context).size.height / 2,
+          height: size / 2,
+          // height: MediaQuery.of(context).size.height / 2,
           decoration: BoxDecoration(
-            color: Color(int.parse((state as SheetColorLoaded).colorString)),
+            color: Color(int.parse(note.noteColor)),
             boxShadow: [
               BoxShadow(
                 offset: const Offset(0, 1),
@@ -36,20 +42,23 @@ class NewNoteSheet extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(30, (index) {
-                  if (index.isOdd) {
-                    return Container(
-                      width: 3,
-                      // color: Colors.blueGrey[900],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(30, (index) {
+                    if (index.isOdd) {
+                      return Container(
+                        width: 3,
+                        // color: Colors.blueGrey[900],
+                      );
+                    }
+                    return CircleAvatar(
+                      radius: 7,
+                      backgroundColor: Theme.of(context).colorScheme.background,
                     );
-                  }
-                  return CircleAvatar(
-                    radius: 7,
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                  );
-                }),
+                  }),
+                ),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -58,7 +67,7 @@ class NewNoteSheet extends StatelessWidget {
                     child: Column(
                       children: [
                         TextFormField(
-                          autofocus: true,
+                          initialValue: note.noteTitle,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Titre',
@@ -72,7 +81,9 @@ class NewNoteSheet extends StatelessWidget {
                           onChanged: onTitleChanged,
                         ),
                         TextFormField(
+                          initialValue: note.noteBody,
                           focusNode: focusNode,
+                          autofocus: true,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           decoration: const InputDecoration(
@@ -93,7 +104,8 @@ class NewNoteSheet extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         );

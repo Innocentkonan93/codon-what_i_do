@@ -44,7 +44,7 @@ class AddNote extends NotesEvent {
 
 //? Edit
 class EditNote extends NotesEvent {
-  final List<NoteModel> note;
+  final NoteModel note;
 
   const EditNote({required this.note});
 
