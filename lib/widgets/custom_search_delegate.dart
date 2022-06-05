@@ -40,7 +40,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   String? get searchFieldLabel {
-    return "Recherchez...";
+    return "Recherchez titre, mot...";
   }
 
   @override
@@ -89,13 +89,20 @@ class CustomSearchDelegate extends SearchDelegate {
     List<NoteModel> notes =
         (BlocProvider.of<NotesBloc>(context).state as NotesLoaded).notes;
     List<NoteModel> searchResult = notes.where((searchResult) {
-      final result = searchResult.noteTitle.toLowerCase();
+      final inTitleSearchResult = searchResult.noteTitle.toLowerCase();
+      final inBodySearchResult = searchResult.noteBody.toLowerCase();
       final input = query.toLowerCase();
-      return result.contains(input);
+      return inTitleSearchResult.contains(input) ||
+          inBodySearchResult.contains(input);
     }).toList();
-    return SearchSuggestionGrid(
-      isGrid: true,
-      notes: searchResult,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SearchSuggestionGrid(
+        isGrid: true,
+        notes: searchResult,
+      ),
     );
     // return ListView.builder(
     //   itemCount: notes.length,

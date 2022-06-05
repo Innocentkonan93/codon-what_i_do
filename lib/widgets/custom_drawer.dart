@@ -110,12 +110,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         Navigator.pop(context);
                         if (Platform.isIOS) {
                           Share.share(
-                            "Zoknot une superbe application de note essai-le\nhttps://apps.apple.com/us/app/zoknot/id1622896004",
+                            "Zoknot, une superbe application de note essai-le\nhttps://apps.apple.com/us/app/zoknot/id1622896004",
                             subject: "Partager Zoknot",
                           );
                         } else {
                           Share.share(
-                            "Zoknot une superbe application de note essai-le\nhttps://play.google.com/store/apps/details?id=com.story.zoknot",
+                            "Zoknot, une superbe application de note essai-le\nhttps://play.google.com/store/apps/details?id=com.story.zoknot",
                             subject: "Partager Zoknot",
                           );
                         }

@@ -22,6 +22,9 @@ class AddNoteScreen extends StatefulWidget {
 }
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
+
+  final TextEditingController _titlecontroller = TextEditingController();
+  final TextEditingController _bodycontroller = TextEditingController();
   int? index;
   String? sheetColor;
 
@@ -46,8 +49,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           },
           builder: (context, notestate) {
             NoteModel note = NoteModel(
-              noteTitle: "",
-              noteBody: "",
+              noteTitle: _titlecontroller.text,
+              noteBody: _bodycontroller.text,
               noteFilePath: "",
               noteColor: noteColor,
               noteNumber: index != null ? index! : 0,
@@ -78,6 +81,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       NewNoteSheet(
+                        titlecontroller: _titlecontroller,
+                        bodycontroller: _bodycontroller,
                         textStyle: const TextStyle(),
                         focusNode: focusNode,
                         onTitleChanged: (title) {

@@ -138,9 +138,7 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                 context: context,
                 builder: (context) {
                   return CustomTextStylePanel(
-                    textStyle: const TextStyle(
-                      fontSize: 14,
-                    ),
+                    fontSize: 14,
                     textAlign: TextAlign.left,
                   );
                 },
@@ -152,6 +150,21 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
               Share.share(
                 "${widget.note.noteTitle}\n\n${widget.note.noteBody}",
                 subject: "Partage de : \n ${widget.note.noteTitle}",
+              );
+            }
+
+            if (val == "rappel") {
+              final result = showModalBottomSheet(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  ),
+                ),
+                isDismissible: false,
+                context: context,
+                builder: (context) {
+                  return const CustomDateTimePicker();
+                },
               );
             }
           },

@@ -10,12 +10,17 @@ class NewNoteSheet extends StatelessWidget {
     required this.focusNode,
     required this.onTitleChanged,
     required this.onBodyChanged,
+    required this.titlecontroller,
+    required this.bodycontroller,
     Key? key,
   }) : super(key: key);
   final TextStyle textStyle;
   final FocusNode focusNode;
   final Function(String)? onTitleChanged;
   final Function(String)? onBodyChanged;
+
+  final TextEditingController titlecontroller;
+  final TextEditingController bodycontroller;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +64,7 @@ class NewNoteSheet extends StatelessWidget {
                       children: [
                         TextFormField(
                           autofocus: true,
+                          controller: titlecontroller,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Titre',
@@ -72,6 +78,7 @@ class NewNoteSheet extends StatelessWidget {
                           onChanged: onTitleChanged,
                         ),
                         TextFormField(
+                          controller: bodycontroller,
                           focusNode: focusNode,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,

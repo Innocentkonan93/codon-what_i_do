@@ -6,7 +6,9 @@ final ThemeData lightTheme = _buildLightTheme();
 ThemeData _buildLightTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
-    brightness: Brightness.light,
+    timePickerTheme: const TimePickerThemeData(
+      backgroundColor: Color(0xFFF4fdff),
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0.0,
@@ -100,6 +102,9 @@ ThemeData _buildDarkTheme() {
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0.0,
+    ),
+    timePickerTheme: const TimePickerThemeData(
+      backgroundColor: Color(0xFF263238),
     ),
     iconTheme: const IconThemeData(color: Color(0xFFF4fdff)),
     textTheme: TextTheme(

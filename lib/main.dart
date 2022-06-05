@@ -29,6 +29,15 @@ class MyApp extends StatelessWidget {
       builder: (context, state) {
         if (state is LoadTheme) {
           return MaterialApp(
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('fr', 'FR'),
+            ],
+            localizationsDelegates: const [
+              // GlobalMaterialLocalizations.delegate,
+              // GlobalWidgetsLocalizations.delegate,
+              // GlobalCupertinoLocalizations.delegate,
+            ],
             debugShowCheckedModeBanner: false,
             title: 'Zoknot',
             theme: state.themeData,

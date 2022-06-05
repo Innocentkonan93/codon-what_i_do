@@ -1,8 +1,8 @@
-# whai_i_do
+# Zoknot
 
-A new Flutter project.
+Une application de note super intélligente.
 
-## Getting Started
+## Commencer.
 
 This project is a starting point for a Flutter application.
 

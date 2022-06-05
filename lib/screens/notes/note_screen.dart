@@ -153,8 +153,7 @@ class _NoteScreenState extends State<NoteScreen> {
                     // if (musicFile != null) PlayerBar(musicFile: musicFile!),
                     Flexible(
                       child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 6),
+                        margin: const EdgeInsets.fromLTRB(4, 6, 4, 0),
                         color: Color(int.parse(note!.noteColor)),
                         child: Column(
                           children: [
