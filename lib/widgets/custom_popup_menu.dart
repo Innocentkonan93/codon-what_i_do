@@ -133,7 +133,7 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                     top: Radius.circular(30),
                   ),
                 ),
-                isDismissible: false,
+
                 enableDrag: false,
                 context: context,
                 builder: (context) {

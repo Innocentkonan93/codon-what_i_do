@@ -70,7 +70,8 @@ class CustomDeletingDialog extends StatelessWidget {
                             }
                             return CircleAvatar(
                               radius: 6,
-                              backgroundColor: Colors.blueGrey[900],
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.background,
                             );
                           }),
                         ),
