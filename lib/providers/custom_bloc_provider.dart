@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zoknot/bloc/colors/sheet_color_bloc.dart';
 import 'package:zoknot/bloc/notes/notes_bloc.dart';
+import 'package:zoknot/bloc/style/sheet_style_bloc.dart';
 import 'package:zoknot/bloc/theme/change_theme_bloc.dart';
 import 'package:zoknot/main.dart';
 
@@ -28,8 +29,11 @@ class CustomBlocProvider extends StatelessWidget {
         BlocProvider(
           create: (context) => SheetColorBloc()..add(DecideSheetColor()),
         ),
+        BlocProvider(
+          create: (context) => SheetStyleBloc(),
+        ),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     );
   }
 }

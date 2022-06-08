@@ -199,10 +199,13 @@ class _NoteScreenState extends State<NoteScreen> {
                                             .headline6!
                                             .copyWith(
                                               color: const Color(0xFF263238),
-                                              fontSize: 16,
+                                              fontSize: note!.noteFontSize,
                                               fontWeight: FontWeight.w600,
                                               height: 2.4,
                                             ),
+                                        textAlign: note!.noteTextAlign == "left"
+                                            ? TextAlign.left
+                                            : TextAlign.justify,
                                       ),
                                     ],
                                   ),

@@ -6,6 +6,7 @@ import 'package:zoknot/models/note_model.dart';
 import 'package:zoknot/widgets/widgets.dart';
 
 import '../../bloc/notes/notes_bloc.dart';
+import '../../bloc/style/sheet_style_bloc.dart';
 
 class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({Key? key}) : super(key: key);
@@ -22,7 +23,6 @@ class AddNoteScreen extends StatefulWidget {
 }
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
-
   final TextEditingController _titlecontroller = TextEditingController();
   final TextEditingController _bodycontroller = TextEditingController();
   int? index;
@@ -38,71 +38,78 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SheetColorBloc, SheetColorState>(
-      builder: (context, colorstate) {
-        String noteColor = (colorstate as SheetColorLoaded).colorString;
-        return BlocConsumer<NotesBloc, NotesState>(
-          listener: (context, notestate) {
-            if (notestate is NotesLoaded) {
-              Navigator.pop(context);
-            }
-          },
-          builder: (context, notestate) {
-            NoteModel note = NoteModel(
-              noteTitle: _titlecontroller.text,
-              noteBody: _bodycontroller.text,
-              noteFilePath: "",
-              noteColor: noteColor,
-              noteNumber: index != null ? index! : 0,
-              noteReminderDate: DateTime.now(),
-              noteCreatedDate: DateTime.now(),
-            );
-            return Scaffold(
-              appBar: AppBar(
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      context.read<NotesBloc>().add(
-                            AddNote(note: note),
-                          );
-                    },
-                    child: SvgPicture.asset(
-                      "assets/icons/check.svg",
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-              backgroundColor: Theme.of(context).colorScheme.background,
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      NewNoteSheet(
-                        titlecontroller: _titlecontroller,
-                        bodycontroller: _bodycontroller,
-                        textStyle: const TextStyle(),
-                        focusNode: focusNode,
-                        onTitleChanged: (title) {
-                          note = note.copyWith(noteTitle: title);
-                          print(title);
+    return BlocBuilder<SheetStyleBloc, SheetStyleState>(
+      builder: (context, styleState) {
+        double noteFontSize = (styleState as StyleLoaded).fontSize;
+        String noteTextAlign = (styleState as StyleLoaded).texAlign;
+        return BlocBuilder<SheetColorBloc, SheetColorState>(
+          builder: (context, colorstate) {
+            String noteColor = (colorstate as SheetColorLoaded).colorString;
+            return BlocConsumer<NotesBloc, NotesState>(
+              listener: (context, notestate) {
+                if (notestate is NotesLoaded) {
+                  Navigator.pop(context);
+                }
+              },
+              builder: (context, notestate) {
+                NoteModel note = NoteModel(
+                  noteTitle: _titlecontroller.text,
+                  noteBody: _bodycontroller.text,
+                  noteFilePath: "",
+                  noteColor: noteColor,
+                  noteNumber: index != null ? index! : 0,
+                  noteFontSize: noteFontSize,
+                  noteTextAlign: noteTextAlign,
+                  noteReminderDate: DateTime.now(),
+                  noteCreatedDate: DateTime.now(),
+                );
+                return Scaffold(
+                  appBar: AppBar(
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          context.read<NotesBloc>().add(
+                                AddNote(note: note),
+                              );
                         },
-                        onBodyChanged: (body) {
-                          note = note.copyWith(noteBody: body);
-                        },
-                      )
+                        child: SvgPicture.asset(
+                          "assets/icons/check.svg",
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ),
-              bottomSheet: SafeArea(
-                child: CustomBottomSheet(
-                  note: note,
-                  focusNode: focusNode,
-                ),
-              ),
+                  backgroundColor: Theme.of(context).colorScheme.background,
+                  body: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          NewNoteSheet(
+                            titlecontroller: _titlecontroller,
+                            bodycontroller: _bodycontroller,
+                            textStyle: const TextStyle(),
+                            focusNode: focusNode,
+                            onTitleChanged: (title) {
+                              note = note.copyWith(noteTitle: title);
+                              print(title);
+                            },
+                            onBodyChanged: (body) {
+                              note = note.copyWith(noteBody: body);
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  bottomSheet: SafeArea(
+                    child: CustomBottomSheet(
+                      focusNode: focusNode,
+                    ),
+                  ),
+                );
+              },
             );
           },
         );

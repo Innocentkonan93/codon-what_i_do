@@ -15,7 +15,7 @@ class NewNoteDatabase {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initBD('zknts.Db');
+    _database = await _initBD('sprzknts.Db');
     return _database!;
   }
 
@@ -31,7 +31,7 @@ class NewNoteDatabase {
 // CREATE DATABASE
   Future _createDB(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE notes (${NoteFields.id} INTEGER PRIMARY KEY AUTOINCREMENT, ${NoteFields.noteTitle} TEXT NOT NULL, ${NoteFields.noteBody} TEXT NOT NULL, ${NoteFields.noteFilePath} TEXT NULL, ${NoteFields.noteColor} TEXT NOT NULL, ${NoteFields.noteNumber} TEXT NOT NULL, ${NoteFields.noteReminderDate} TEXT NULL, ${NoteFields.noteCreatedDate} TEXT NOT NULL)');
+        'CREATE TABLE notes (${NoteFields.id} INTEGER PRIMARY KEY AUTOINCREMENT, ${NoteFields.noteTitle} TEXT NOT NULL, ${NoteFields.noteBody} TEXT NOT NULL, ${NoteFields.noteFilePath} TEXT NULL, ${NoteFields.noteColor} TEXT NOT NULL, ${NoteFields.noteNumber} TEXT NOT NULL, ${NoteFields.noteFontSize} TEXT NULL, ${NoteFields.noteTextAlign} TEXT NULL, ${NoteFields.noteReminderDate} TEXT NULL, ${NoteFields.noteCreatedDate} TEXT NOT NULL)');
   }
 
 // CREATE NOTE

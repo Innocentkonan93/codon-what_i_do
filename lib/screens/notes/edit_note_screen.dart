@@ -76,10 +76,10 @@ class _EditNoteViewState extends State<EditNoteView> {
               ),
             ),
           ),
-          // bottomSheet: CustomBottomSheet(
-          //   note: note,
-          //   focusNode: focusNode,
-          // ),
+          bottomSheet: CustomBottomSheet(
+            note: note,
+            focusNode: focusNode,
+          ),
         );
       },
     );

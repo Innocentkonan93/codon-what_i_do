@@ -86,7 +86,10 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
                 width: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: Colors.white54,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(0.6)
                 ),
               )
             ],

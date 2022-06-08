@@ -7,12 +7,12 @@ import '../bloc/colors/sheet_color_bloc.dart';
 
 class CustomBottomSheet extends StatefulWidget {
   const CustomBottomSheet({
-    required this.note,
+    this.note,
     required this.focusNode,
     Key? key,
   }) : super(key: key);
 
-  final NoteModel note;
+  final NoteModel? note;
   final FocusNode focusNode;
   @override
   State<CustomBottomSheet> createState() => _CustomBottomSheetState();
@@ -33,14 +33,35 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       width: double.infinity,
       child: Row(
         children: [
-          const Text(
-            'Aa',
-            style: TextStyle(color: Colors.grey, fontSize: 20),
+          TextButton(
+            onPressed: () {
+              showModalBottomSheet(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  ),
+                ),
+                enableDrag: false,
+                context: context,
+                builder: (context) {
+                  return CustomTextStylePanel(
+                    note: widget.note,
+                    fontSize: 14,
+                    textAlign: TextAlign.left,
+                  );
+                },
+              );
+            },
+            child: const Text(
+              'Aa|',
+              style: TextStyle(color: Colors.orange, fontSize: 20),
+            ),
           ),
           Expanded(
             child: BlocBuilder<SheetColorBloc, SheetColorState>(
               builder: (context, state) {
-                return Row(
+                return widget.note == null
+                    ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
                     sheetColors.length,
@@ -78,7 +99,8 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       );
                     },
                   ),
-                );
+                      )
+                    : const SizedBox();
               },
             ),
           ),

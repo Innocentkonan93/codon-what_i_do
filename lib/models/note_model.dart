@@ -14,11 +14,13 @@ class NoteFields {
     noteCreatedDate
   ];
   static String id = '_id';
-  static String noteTitle = 'noet_title';
+  static String noteTitle = 'note_title';
   static String noteBody = 'note_body';
   static String noteFilePath = 'note_file_path';
   static String noteColor = 'note_color';
   static String noteNumber = 'note_number';
+  static String noteFontSize = 'note_font_size';
+  static String noteTextAlign = 'note_text_align';
   static String noteReminderDate = 'note_reminder_date';
   static String noteCreatedDate = 'note_created_date';
 }
@@ -30,6 +32,8 @@ class NoteModel extends Equatable {
   final String? noteFilePath;
   final String noteColor;
   final int noteNumber;
+  final double? noteFontSize;
+  final String? noteTextAlign;
   final DateTime? noteReminderDate;
   final DateTime noteCreatedDate;
 
@@ -40,6 +44,8 @@ class NoteModel extends Equatable {
     this.noteFilePath,
     required this.noteColor,
     required this.noteNumber,
+    this.noteFontSize,
+    this.noteTextAlign,
     this.noteReminderDate,
     required this.noteCreatedDate,
   });
@@ -51,6 +57,8 @@ class NoteModel extends Equatable {
     String? noteFilePath,
     String? noteColor,
     int? noteNumber,
+    double? noteFontSize,
+    String? noteTextAlign,
     DateTime? noteReminderDate,
     DateTime? noteCreatedDate,
   }) {
@@ -61,6 +69,8 @@ class NoteModel extends Equatable {
       noteFilePath: noteFilePath ?? this.noteFilePath,
       noteColor: noteColor ?? this.noteColor,
       noteNumber: noteNumber ?? this.noteNumber,
+      noteFontSize: noteFontSize ?? this.noteFontSize,
+      noteTextAlign: noteTextAlign ?? this.noteTextAlign,
       noteReminderDate: noteReminderDate ?? this.noteReminderDate,
       noteCreatedDate: noteCreatedDate ?? this.noteCreatedDate,
     );
@@ -74,6 +84,8 @@ class NoteModel extends Equatable {
       NoteFields.noteFilePath: noteFilePath,
       NoteFields.noteColor: noteColor,
       NoteFields.noteNumber: noteNumber,
+      NoteFields.noteFontSize: noteFontSize,
+      NoteFields.noteTextAlign: noteTextAlign,
       NoteFields.noteReminderDate: noteReminderDate!.toIso8601String(),
       NoteFields.noteCreatedDate: noteCreatedDate.toIso8601String(),
     };
@@ -86,11 +98,11 @@ class NoteModel extends Equatable {
       noteBody: json[NoteFields.noteBody] as String,
       noteFilePath: json[NoteFields.noteFilePath] as String,
       noteColor: json[NoteFields.noteColor] as String,
-      noteNumber:  int.parse(json[NoteFields.noteNumber]),
-      noteReminderDate:
-          DateTime.parse(json[NoteFields.noteReminderDate]),
-      noteCreatedDate:
-          DateTime.parse(json[NoteFields.noteCreatedDate]),
+      noteNumber: int.parse(json[NoteFields.noteNumber]),
+      noteFontSize: double.parse(json[NoteFields.noteFontSize]),
+      noteTextAlign: json[NoteFields.noteTextAlign],
+      noteReminderDate: DateTime.parse(json[NoteFields.noteReminderDate]),
+      noteCreatedDate: DateTime.parse(json[NoteFields.noteCreatedDate]),
     );
   }
 
@@ -102,6 +114,8 @@ class NoteModel extends Equatable {
         noteFilePath,
         noteColor,
         noteNumber,
+        noteFontSize,
+        noteTextAlign,
         noteReminderDate,
         noteCreatedDate,
       ];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zoknot/bloc/notes/notes_bloc.dart';
@@ -34,9 +35,9 @@ class MyApp extends StatelessWidget {
               Locale('fr', 'FR'),
             ],
             localizationsDelegates: const [
-              // GlobalMaterialLocalizations.delegate,
-              // GlobalWidgetsLocalizations.delegate,
-              // GlobalCupertinoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
             ],
             debugShowCheckedModeBanner: false,
             title: 'Zoknot',

@@ -43,30 +43,36 @@ class NoteSheet extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: isGrid
-                        ? List.generate(17, (index) {
-                            if (index.isOdd) {
-                              return Container(
-                                width: 3,
-                                // color: Colors.blueGrey[900],
-                              );
-                            }
-                            return CircleAvatar(
-                                radius: 6,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.background);
-                          })
-                        : List.generate(30, (index) {
-                            if (index.isOdd) {
-                              return Container(
-                                width: 3,
-                                // color: Theme.of(context).colorScheme.background
-                              );
-                            }
-                            return CircleAvatar(
-                                radius: 7,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.background);
-                          }),
+                        ? List.generate(
+                            17,
+                            (index) {
+                              if (index.isOdd) {
+                                return Container(
+                                  width: 3,
+                                  // color: Colors.blueGrey[900],
+                                );
+                              }
+                              return CircleAvatar(
+                                  radius: 6,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background);
+                            },
+                          )
+                        : List.generate(
+                            30,
+                            (index) {
+                              if (index.isOdd) {
+                                return Container(
+                                  width: 3,
+                                  // color: Theme.of(context).colorScheme.background
+                                );
+                              }
+                              return CircleAvatar(
+                                  radius: 7,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background);
+                            },
+                          ),
                   ),
                 ),
                 Expanded(
@@ -89,7 +95,7 @@ class NoteSheet extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: const Color(0xFF263238),
-                                      fontSize: 15,
+                                      fontSize: note.noteFontSize,
                                       fontWeight: FontWeight.w600,
                                       height: 1.5,
                                     ),
