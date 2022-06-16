@@ -29,13 +29,12 @@ class NoteSheet extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-                color: Color(int.parse(note.noteColor)),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black12,
-                      offset: Offset(0, -5),
-                      blurRadius: 3)
-                ]),
+              color: Color(int.parse(note.noteColor)),
+              // boxShadow: const [
+              //   BoxShadow(
+              //       color: Colors.black12, offset: Offset(0, -5), blurRadius: 3)
+              // ],
+            ),
             child: Column(
               children: [
                 Padding(
@@ -99,6 +98,13 @@ class NoteSheet extends StatelessWidget {
                                       fontWeight: FontWeight.w600,
                                       height: 1.5,
                                     ),
+                            textAlign: note.noteTextAlign == "center"
+                                ? TextAlign.center
+                                : note.noteTextAlign == "justify"
+                                    ? TextAlign.justify
+                                    : note.noteTextAlign == "left"
+                                        ? TextAlign.left
+                                        : TextAlign.right,
                           ),
                         ),
                       ],

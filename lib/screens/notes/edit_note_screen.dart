@@ -62,7 +62,6 @@ class _EditNoteViewState extends State<EditNoteView> {
                 children: [
                   EditNoteSheet(
                     note: note,
-                    textStyle: const TextStyle(),
                     focusNode: focusNode,
                     onTitleChanged: (title) {
                       note = note.copyWith(noteTitle: title);

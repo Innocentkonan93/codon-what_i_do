@@ -24,15 +24,39 @@ class CustomTextStylePanel extends StatefulWidget {
 
 class _CustomTextStylePanelState extends State<CustomTextStylePanel> {
   double fontSize = 16.0;
-  List<String> textStyleIcon = [
-    "assets/icons/align-center.svg",
-    "assets/icons/align-justify.svg",
-    "assets/icons/align-right.svg",
-    "assets/icons/align-left.svg",
-  ];
+  double? _selectedFontSize;
+  String? _selectedAlign;
+
+  Map<String, dynamic> sheetTextAlign = {
+    "center": {
+      "path": "assets/icons/align-center.svg",
+      "value": "center",
+    },
+    "path": {
+      "path": "assets/icons/align-justify.svg",
+      "value": "justify",
+    },
+    "left": {
+      "path": "assets/icons/align-left.svg",
+      "value": "left",
+    },
+    "right": {
+      "path": "assets/icons/align-right.svg",
+      "value": "right",
+    },
+  };
+
+  @override
+  void initState() {
+    _selectedAlign = widget.note!.noteTextAlign;
+    _selectedFontSize = widget.note!.noteFontSize;
+    fontSize = _selectedFontSize!;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.note!.noteFontSize);
     return BlocBuilder<NotesBloc, NotesState>(
       builder: (context, noteState) {
         return BlocBuilder<SheetStyleBloc, SheetStyleState>(
@@ -94,8 +118,9 @@ class _CustomTextStylePanelState extends State<CustomTextStylePanel> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    fontSize--;
+                                    _selectedFontSize = fontSize--;
                                   });
+                                  print(_selectedFontSize);
                                 },
                                 child: CircleAvatar(
                                   backgroundColor: Colors.white,
@@ -110,7 +135,7 @@ class _CustomTextStylePanelState extends State<CustomTextStylePanel> {
                                 child: SizedBox(
                                   child: Center(
                                     child: Text(
-                                      "$fontSize",
+                                      "$_selectedFontSize",
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline5!
@@ -126,7 +151,7 @@ class _CustomTextStylePanelState extends State<CustomTextStylePanel> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    fontSize++;
+                                    _selectedFontSize = fontSize++;
                                   });
                                 },
                                 child: CircleAvatar(
@@ -147,12 +172,22 @@ class _CustomTextStylePanelState extends State<CustomTextStylePanel> {
                   const SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: textStyleIcon
-                        .map((icon) => SvgPicture.asset(
-                              icon,
-                              color: Theme.of(context).colorScheme.onBackground,
-                            ))
-                        .toList(),
+                    children: sheetTextAlign.entries.map((item) {
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            _selectedAlign = item.value['value'];
+                          });
+                          print(_selectedAlign);
+                        },
+                        child: SvgPicture.asset(
+                          item.value['path'],
+                          color: _selectedAlign == item.value['value']
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.onBackground,
+                        ),
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 40),
                   ElevatedButton(
@@ -161,19 +196,19 @@ class _CustomTextStylePanelState extends State<CustomTextStylePanel> {
                         context.read<NotesBloc>().add(
                               EditNote(
                                 note: widget.note!.copyWith(
-                                  noteFontSize: fontSize,
-                                  noteTextAlign: "left",
+                                  noteFontSize: _selectedFontSize,
+                                  noteTextAlign: _selectedAlign!,
                                 ),
                               ),
                             );
-                        Navigator.pop(context);
-                      } else {
-                        context.read<SheetStyleBloc>().add(
-                              SetSheetStyle(
-                                  fontSize: fontSize, textAlign: "left"),
-                            );
+
                         Navigator.pop(context);
                       }
+                      context.read<SheetStyleBloc>().add(
+                            SetSheetStyle(
+                                fontSize: _selectedFontSize!,
+                                textAlign: _selectedAlign!),
+                          );
                     },
                     child: Text(
                       'Appliquer',

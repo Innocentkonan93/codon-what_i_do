@@ -32,77 +32,78 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       color: Colors.white12,
       width: double.infinity,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextButton(
-            onPressed: () {
-              showModalBottomSheet(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(30),
+          if (widget.note != null)
+            TextButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(30),
+                    ),
                   ),
-                ),
-                enableDrag: false,
-                context: context,
-                builder: (context) {
-                  return CustomTextStylePanel(
-                    note: widget.note,
-                    fontSize: 14,
-                    textAlign: TextAlign.left,
-                  );
-                },
-              );
-            },
-            child: const Text(
-              'Aa|',
-              style: TextStyle(color: Colors.orange, fontSize: 20),
-            ),
-          ),
-          Expanded(
-            child: BlocBuilder<SheetColorBloc, SheetColorState>(
-              builder: (context, state) {
-                return widget.note == null
-                    ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    sheetColors.length,
-                    (index) {
-                      return GestureDetector(
-                        onTap: () async {
-                          final result = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: const ColorPanel(),
-                              );
-                            },
-                          );
-
-                          if (result != null) {
-                            print(result);
-                            context
-                                .read<SheetColorBloc>()
-                                .add(SetSheetColor(colorString: result));
-                          }
-                        },
-                        child: Container(
-                          height: 15,
-                          width: 15,
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: sheetColors[index],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                      )
-                    : const SizedBox();
+                  enableDrag: false,
+                  context: context,
+                  builder: (context) {
+                    return CustomTextStylePanel(
+                      note: widget.note,
+                      fontSize: 14,
+                      textAlign: TextAlign.left,
+                    );
+                  },
+                );
               },
+              child: const Text(
+                'Aa|',
+                style: TextStyle(color: Colors.orange, fontSize: 20),
+              ),
             ),
+          BlocBuilder<SheetColorBloc, SheetColorState>(
+            builder: (context, state) {
+              return widget.note == null
+                  ? GestureDetector(
+                      onTap: () async {
+                        final result = await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const ColorPanel(),
+                            );
+                          },
+                        );
+
+                        if (result != null) {
+                          print(result);
+                          context
+                              .read<SheetColorBloc>()
+                              .add(SetSheetColor(colorString: result));
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                          sheetColors.length,
+                          (index) {
+                            return Container(
+                              height: 12,
+                              width: 12,
+                              margin: const EdgeInsets.symmetric(horizontal: 3),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: sheetColors[index],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  : const SizedBox();
+            },
           ),
           TextButton(
             onPressed: () {
@@ -112,9 +113,9 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 widget.focusNode.requestFocus();
               }
             },
-            child: !widget.focusNode.hasFocus
-                ? const Icon(Icons.keyboard)
-                : const Icon(Icons.keyboard_hide_rounded),
+            child: const Icon(
+              Icons.keyboard,
+            ),
           )
         ],
       ),

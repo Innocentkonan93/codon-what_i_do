@@ -40,7 +40,8 @@ class CustomDeletingDialog extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .headline5!
-                          .copyWith(color: Colors.white),
+                          .copyWith(
+                          color: Theme.of(context).colorScheme.onBackground),
                     ),
                   )
                 ],

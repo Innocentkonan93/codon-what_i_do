@@ -40,10 +40,15 @@ class SearchSuggestionGrid extends StatelessWidget {
             itemCount: notes.length,
             itemBuilder: (context, index) {
               NoteModel note = notes[index];
-              return NoteSheet(
-                key: ValueKey(note.id),
-                note: note,
-                isGrid: isGrid,
+              return PhysicalModel(
+                elevation: 10,
+                shadowColor: Colors.black,
+                color: Color(int.parse(note.noteColor)),
+                child: NoteSheet(
+                  key: ValueKey(note.id),
+                  note: note,
+                  isGrid: isGrid,
+                ),
               );
             },
           );

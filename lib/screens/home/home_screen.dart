@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   bool isGrid = true;
   @override
   void initState() {
@@ -31,7 +32,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldkey,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            _scaffoldkey.currentState!.openDrawer();
+          },
+          icon: SvgPicture.asset(
+            "assets/icons/menu.svg",
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
+        ),
         backgroundColor: Theme.of(context).colorScheme.background,
         actions: [
           TextButton(
@@ -71,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               children: [
                 Text(
-                  'Mes productions',
+                  'Mes notes',
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const Spacer(),

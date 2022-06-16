@@ -63,11 +63,10 @@ class NewNoteSheet extends StatelessWidget {
                     child: Column(
                       children: [
                         TextFormField(
-                          autofocus: true,
                           controller: titlecontroller,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Titre',
+                            hintText: 'Ajouter un titre',
                           ),
                           cursorColor: const Color(0xFF263238),
                           style: GoogleFonts.signikaNegative(
@@ -78,6 +77,7 @@ class NewNoteSheet extends StatelessWidget {
                           onChanged: onTitleChanged,
                         ),
                         TextFormField(
+                          autofocus: true,
                           controller: bodycontroller,
                           focusNode: focusNode,
                           keyboardType: TextInputType.multiline,

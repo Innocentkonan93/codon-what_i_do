@@ -29,7 +29,7 @@ class NotificationApi {
     ];
 // vibrate - sleep 0.5s - vibrate - sleep 1s - vibrate - sleep 0.5s - vibrate
     Vibrate.vibrateWithPauses(pauses);
-    
+
     return NotificationDetails(
       android: AndroidNotificationDetails(
         'zoknot_channel_id',
@@ -93,8 +93,8 @@ class NotificationApi {
       await _notificatonDetails(),
       payload: payload,
     );
-    
   }
+
   static Future showSchudleNotification({
     int? id,
     String? title,
@@ -102,7 +102,7 @@ class NotificationApi {
     String? payload,
     required tz.TZDateTime schudelDate,
   }) async {
-    _notification.zonedSchedule(
+    await _notification.zonedSchedule(
       id!,
       title,
       body,
@@ -116,6 +116,7 @@ class NotificationApi {
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
     );
+    // cancel(id);
   }
 
   static tz.TZDateTime _scheduleDaily(Time time) {

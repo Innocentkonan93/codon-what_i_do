@@ -68,9 +68,17 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     actions: [
                       TextButton(
                         onPressed: () {
-                          context.read<NotesBloc>().add(
-                                AddNote(note: note),
-                              );
+                          if (_bodycontroller.text.isNotEmpty) {
+                            context.read<NotesBloc>().add(
+                                  AddNote(note: note),
+                                );
+                          } else {
+                            const snackBar = SnackBar(
+                              content: Text('Veuillez écrire quelque chose...'),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
                         },
                         child: SvgPicture.asset(
                           "assets/icons/check.svg",

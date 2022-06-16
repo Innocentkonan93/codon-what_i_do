@@ -138,6 +138,7 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                 context: context,
                 builder: (context) {
                   return CustomTextStylePanel(
+                    note: widget.note,
                     fontSize: 14,
                     textAlign: TextAlign.left,
                   );
@@ -149,7 +150,7 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
             if (val == "share") {
               Share.share(
                 "${widget.note.noteTitle}\n\n${widget.note.noteBody}",
-                subject: "Partage de : \n ${widget.note.noteTitle}",
+                // subject: "Partage de : \n ${widget.note.noteTitle}",
               );
             }
 

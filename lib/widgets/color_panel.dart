@@ -7,22 +7,21 @@ class ColorPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Color> sheetColors = [
-      Theme.of(context).colorScheme.primary,
-      Theme.of(context).colorScheme.secondary,
-      Theme.of(context).colorScheme.tertiary,
-    ];
+   
     Map<String, dynamic> panelColors = {
       "primary": {
-        "code": "0XFF1ba9c3",
+        "code": "0XFF1BA9C3",
+        // "code": "0XFF1ba9c3",
         "color": Theme.of(context).colorScheme.primary,
       },
       "secondary": {
-        "code": "0XFFfdbf17",
+        "code": "0XFFF3D591",
+        // "code": "0XFFfdbf17",
         "color": Theme.of(context).colorScheme.secondary,
       },
       "tertiary": {
-        "code": "0XFFf39591",
+        "code": "0XFFF39591",
+        // "code": "0XFFf39591",
         "color": Theme.of(context).colorScheme.tertiary,
       },
     };

@@ -100,8 +100,16 @@ class _NoteScreenState extends State<NoteScreen> {
             : Scaffold(
                 backgroundColor: Theme.of(context).colorScheme.background,
                 appBar: AppBar(
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: SvgPicture.asset(
+                      "assets/icons/x.svg",
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
+                  ),
                   backgroundColor: Theme.of(context).colorScheme.background,
-
                   actions: [
                     TextButton(
                       onPressed: () {
@@ -118,7 +126,10 @@ class _NoteScreenState extends State<NoteScreen> {
                     TextButton(
                       // onPressed: setAudio,
                       onPressed: () async {
-                        final result = await FilePicker.platform.pickFiles();
+                        final result = await FilePicker.platform.pickFiles(
+                            // allowedExtensions: ["3gp", "mp3"],
+                            // type: FileType.custom,
+                            );
 
                         if (result != null) {
                           setState(() {
@@ -143,80 +154,92 @@ class _NoteScreenState extends State<NoteScreen> {
                     )
                   ],
                 ),
-                body: Column(
-                  children: [
-                    // PlayerWidget(),
-                    if (note!.noteFilePath != "")
-                      PlayerBar(
-                        musicFile: File(note!.noteFilePath!),
-                      ),
-                    // if (musicFile != null) PlayerBar(musicFile: musicFile!),
-                    Flexible(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(4, 6, 4, 0),
-                        color: Color(int.parse(note!.noteColor)),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 3, 8),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: List.generate(30, (index) {
-                                  if (index.isOdd) {
-                                    return Container(
-                                      width: 3,
-                                      // color: Colors.blueGrey[900],
-                                    );
-                                  }
-                                  return CircleAvatar(
-                                      radius: 7,
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .background);
-                                }),
+                body: PhysicalModel(
+                  elevation: 15,
+                  shadowColor: Colors.black,
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      // PlayerWidget(),
+                      if (Platform.isAndroid && note!.noteFilePath != "")
+                        PlayerBar(
+                          musicFile: File(note!.noteFilePath!),
+                        ),
+                      if (Platform.isIOS && musicFile != null)
+                        PlayerBar(musicFile: musicFile!),
+                      Flexible(
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(4, 6, 4, 0),
+                          color: Color(int.parse(note!.noteColor)),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 3, 8),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(30, (index) {
+                                    if (index.isOdd) {
+                                      return Container(
+                                        width: 3,
+                                        // color: Colors.blueGrey[900],
+                                      );
+                                    }
+                                    return CircleAvatar(
+                                        radius: 7,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .background);
+                                  }),
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 2, 10, 0),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        note!.noteTitle,
-                                        style: GoogleFonts.signikaNegative(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                          color: const Color(0xFF263238),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 2, 10, 0),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        SelectableText(
+                                          note!.noteTitle,
+                                          style: GoogleFonts.signikaNegative(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xFF263238),
+                                          ),
                                         ),
-                                      ),
-                                      SelectableText(
-                                        note!.noteBody,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6!
-                                            .copyWith(
-                                              color: const Color(0xFF263238),
-                                              fontSize: note!.noteFontSize,
-                                              fontWeight: FontWeight.w600,
-                                              height: 2.4,
-                                            ),
-                                        textAlign: note!.noteTextAlign == "left"
-                                            ? TextAlign.left
-                                            : TextAlign.justify,
-                                      ),
-                                    ],
+                                        SelectableText(
+                                          note!.noteBody,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6!
+                                              .copyWith(
+                                                color: const Color(0xFF263238),
+                                                fontSize: note!.noteFontSize,
+                                                fontWeight: FontWeight.w600,
+                                                height: 2.4,
+                                              ),
+                                          textAlign: note!.noteTextAlign ==
+                                                  "center"
+                                              ? TextAlign.center
+                                              : note!.noteTextAlign == "justify"
+                                                  ? TextAlign.justify
+                                                  : note!.noteTextAlign ==
+                                                          "left"
+                                                      ? TextAlign.left
+                                                      : TextAlign.right,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 bottomNavigationBar: _isBottomBannerAdLoaded
                     ? SizedBox(

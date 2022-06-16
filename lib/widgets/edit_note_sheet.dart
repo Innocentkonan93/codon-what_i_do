@@ -8,14 +8,12 @@ import '../bloc/colors/sheet_color_bloc.dart';
 class EditNoteSheet extends StatelessWidget {
   const EditNoteSheet({
     required this.note,
-    required this.textStyle,
     required this.focusNode,
     required this.onTitleChanged,
     required this.onBodyChanged,
     Key? key,
   }) : super(key: key);
   final NoteModel note;
-  final TextStyle textStyle;
   final FocusNode focusNode;
   final Function(String)? onTitleChanged;
   final Function(String)? onBodyChanged;
@@ -70,7 +68,7 @@ class EditNoteSheet extends StatelessWidget {
                           initialValue: note.noteTitle,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Titre',
+                            hintText: 'Ajouter un itre',
                           ),
                           cursorColor: const Color(0xFF263238),
                           style: GoogleFonts.signikaNegative(
@@ -94,10 +92,17 @@ class EditNoteSheet extends StatelessWidget {
                           style:
                               Theme.of(context).textTheme.headline6!.copyWith(
                                     color: const Color(0xFF263238),
-                                    fontSize: 16,
+                                    fontSize: note.noteFontSize,
                                     fontWeight: FontWeight.w600,
                                     height: 2.4,
                                   ),
+                          textAlign: note.noteTextAlign == "center"
+                              ? TextAlign.center
+                              : note.noteTextAlign == "justify"
+                                  ? TextAlign.justify
+                                  : note.noteTextAlign == "left"
+                                      ? TextAlign.left
+                                      : TextAlign.right,
                           onChanged: onBodyChanged,
                         ),
                       ],
