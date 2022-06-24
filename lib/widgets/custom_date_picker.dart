@@ -1,11 +1,21 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:zoknot/models/note_model.dart';
+import 'package:zoknot/services/NotificationService.dart';
+import 'package:timezone/timezone.dart' as tz;
+
+import '../bloc/notes/notes_bloc.dart';
 
 class CustomDateTimePicker extends StatefulWidget {
   const CustomDateTimePicker({
     Key? key,
+    required this.note,
   }) : super(key: key);
+  final NoteModel note;
 
   @override
   State<CustomDateTimePicker> createState() => _CustomDateTimePickerState();
@@ -24,19 +34,20 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
 
   Future<void> _selectDate(BuildContext context) async {
     final picked = await showDatePicker(
-        context: context,
-        initialDate: reminderDate ?? selectedDate,
-        firstDate: DateTime(DateTime.now().year - 5),
-        lastDate: DateTime(DateTime.now().year + 5),
-        helpText: "Choisir la date du rappel",
-        builder: (context, child) {
-          return Theme(
-              data: ThemeData(
-                primaryColor: Color(0xFF263238),
-                colorScheme: Theme.of(context).colorScheme,
-              ),
-              child: child!);
-        });
+      context: context,
+      initialDate: reminderDate ?? selectedDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+      helpText: "Choisir la date du rappel",
+      builder: (context, child) {
+        return Theme(
+            data: ThemeData(
+              primaryColor: const Color(0xFF263238),
+              colorScheme: Theme.of(context).colorScheme,
+            ),
+            child: child!);
+      },
+    );
 
     // ignore: unnecessary_null_comparison
     if (picked != null && picked != selectedDate) {
@@ -123,21 +134,22 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
                       style: Theme.of(context).textTheme.headline4,
                     ),
                     const SizedBox(height: 40),
-                    Container(
-                      width: 250,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onBackground
-                            .withOpacity(0.2),
-                      ),
-                      child: Center(
-                        child: TextButton(
-                          onPressed: () {
-                            _selectDate(context);
-                          },
+                    InkWell(
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                      splashColor: Theme.of(context).colorScheme.primary,
+                      child: Container(
+                        width: 250,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onBackground
+                              .withOpacity(0.2),
+                        ),
+                        child: Center(
                           child: Text(
                             date == null ? "Choisir la date" : date!,
                             style:
@@ -151,21 +163,21 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
                     ),
                     const SizedBox(height: 30),
                     if (date != null)
-                      Container(
-                        width: 200,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onBackground
-                              .withOpacity(0.2),
-                        ),
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              _selectTime(context);
-                            },
+                      InkWell(
+                        onTap: () {
+                          _selectTime(context);
+                        },
+                        child: Container(
+                          width: 200,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onBackground
+                                .withOpacity(0.2),
+                          ),
+                          child: Center(
                             child: Text(
                               time == null ? "Choisir l'heure" : time!,
                               style: Theme.of(context)
@@ -183,16 +195,50 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
                 ),
               ),
               if (time != null)
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
+                BlocBuilder<NotesBloc, NotesState>(
+                  builder: (context, state) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        final noteReminderDate = DateTime(
+                          reminderDate!.year,
+                          reminderDate!.month,
+                          reminderDate!.day,
+                          reminderTime!.hour,
+                          reminderTime!.minute,
+                        );
+                        // NotificationApi.notification
+                        //     .getNotificationAppLaunchDetails();
+                        NotificationApi.showSchudleNotification(
+                          // schudelDate: tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)),
+                          schudelDate: tz.TZDateTime.parse(
+                              tz.local, noteReminderDate.toString()),
+                          id: widget.note.id,
+                          title: "Note: ${widget.note.noteTitle}",
+                          body:
+                              "Votre note requiert votre attention, jetez un oeil",
+                          payload: widget.note.id.toString(),
+                        );
+
+                        context.read<NotesBloc>().add(
+                              EditNote(
+                                note: widget.note.copyWith(
+                                    noteReminderDate: noteReminderDate),
+                              ),
+                            );
+                        Navigator.pop(context);
+                        const snackBar = SnackBar(
+                          content: Text('Rappel ajouté'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      },
+                      child: const Text('Appliquer'),
+                      style: ElevatedButton.styleFrom(
+                        shape: const StadiumBorder(),
+                        elevation: 3,
+                        minimumSize: const Size(125, 30),
+                      ),
+                    );
                   },
-                  child: const Text('Appliquer'),
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    elevation: 3,
-                    minimumSize: const Size(125, 30),
-                  ),
                 ),
               const SizedBox(height: 20),
             ],

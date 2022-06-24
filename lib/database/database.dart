@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_declarations
+// ignore_for_file: prefer_const_declarations, avoid_print
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

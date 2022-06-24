@@ -7,20 +7,6 @@ import 'package:zoknot/widgets/widgets.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   @override
-  // ThemeData appBarTheme(BuildContext context) {
-  //   return
-  //   ThemeData(
-  //     appBarTheme: AppBarTheme(
-  //         backgroundColor: Theme.of(context).colorScheme.background,
-  //         elevation: 0.0),
-  //     scaffoldBackgroundColor: Theme.of(context).colorScheme.background,
-  //     inputDecorationTheme: InputDecorationTheme(
-  //       border: InputBorder.none,
-  //       hintStyle: Theme.of(context).textTheme.headline6,
-  //     ),
-
-  //   );
-  // }
 
   ThemeData appBarTheme(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -35,6 +21,7 @@ class CustomSearchDelegate extends SearchDelegate {
             hintStyle: searchFieldStyle ?? theme.inputDecorationTheme.hintStyle,
             border: InputBorder.none,
           ),
+          
     );
   }
 
@@ -79,8 +66,11 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Column(
-      children: [],
+    return Center(
+      child: Text(
+        'Aucune note trouvée',
+        style: Theme.of(context).textTheme.headline6!,
+      ),
     );
   }
 
@@ -95,6 +85,7 @@ class CustomSearchDelegate extends SearchDelegate {
       return inTitleSearchResult.contains(input) ||
           inBodySearchResult.contains(input);
     }).toList();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -104,18 +95,5 @@ class CustomSearchDelegate extends SearchDelegate {
         notes: searchResult,
       ),
     );
-    // return ListView.builder(
-    //   itemCount: notes.length,
-    //   itemBuilder: (context, index) {
-    //     final note = notes[index];
-    //     return ListTile(
-    //       title: Text(
-    //         note.noteBody,
-    //         style: TextStyle(color: Colors.black),
-    //         maxLines: 1,
-    //       ),
-    //     );
-    //   },
-    // );
   }
 }

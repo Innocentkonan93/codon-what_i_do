@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -127,14 +129,13 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
             }
 
             if (val == "police") {
-              final result = showModalBottomSheet(
+              showModalBottomSheet(
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(30),
                   ),
                 ),
-
-                enableDrag: false,
+                enableDrag: true,
                 context: context,
                 builder: (context) {
                   return CustomTextStylePanel(
@@ -144,7 +145,6 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                   );
                 },
               );
-              result.then((value) => print(value));
             }
 
             if (val == "share") {
@@ -155,7 +155,7 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
             }
 
             if (val == "rappel") {
-              final result = showModalBottomSheet(
+              showModalBottomSheet(
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(30),
@@ -164,7 +164,9 @@ class _CustomPopuMenuState extends State<CustomPopuMenu> {
                 isDismissible: false,
                 context: context,
                 builder: (context) {
-                  return const CustomDateTimePicker();
+                  return CustomDateTimePicker(
+                    note: widget.note,
+                  );
                 },
               );
             }

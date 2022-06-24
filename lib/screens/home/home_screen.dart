@@ -1,7 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:zoknot/screens/notes/add_note_screen.dart';
+import 'package:zoknot/services/NotificationService.dart';
 
 import '../../bloc/notes/notes_bloc.dart';
 import '../../widgets/widgets.dart';
@@ -23,9 +26,30 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   bool isGrid = true;
+
+  // void _runWhileAppIsTerminated() async {
+  //   var details =
+  //       await NotificationApi.notification.getNotificationAppLaunchDetails();
+
+  //   if (details!.didNotificationLaunchApp) {
+  //     if (details.payload != null) {
+  //       NotificationApi.notification.cancel(int.parse(details.payload!));
+  //       Navigator.of(context).push(
+  //         MaterialPageRoute(
+  //           builder: (context) {
+  //             return NoteScreen(noteId: int.parse(details.payload!));
+  //           },
+  //           fullscreenDialog: true,
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
+
   @override
   void initState() {
     BlocProvider.of<NotesBloc>(context).add(LoadNotes());
+    NotificationApi.runWhileAppIsTerminated(context);
     super.initState();
   }
 

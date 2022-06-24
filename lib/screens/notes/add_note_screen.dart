@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, unnecessary_cast
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -65,6 +67,16 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 );
                 return Scaffold(
                   appBar: AppBar(
+                    leading: IconButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        Navigator.pop(context);
+                      },
+                      icon: SvgPicture.asset(
+                        "assets/icons/x.svg",
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                    ),
                     actions: [
                       TextButton(
                         onPressed: () {
@@ -74,7 +86,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                 );
                           } else {
                             const snackBar = SnackBar(
-                              content: Text('Veuillez écrire quelque chose...'),
+                              backgroundColor: Colors.orange,
+                              content: Text(
+                                'Veuillez écrire quelque chose...',
+                                // style: TextStyle(color: Colors.red,),
+                              ),
                             );
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);

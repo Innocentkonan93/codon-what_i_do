@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -229,6 +231,7 @@ class _NoteScreenState extends State<NoteScreen> {
                                                       ? TextAlign.left
                                                       : TextAlign.right,
                                         ),
+                                        const SizedBox(height: 50)
                                       ],
                                     ),
                                   ),

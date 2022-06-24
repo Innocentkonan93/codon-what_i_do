@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable, file_names
 
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -7,8 +8,10 @@ import 'package:rxdart/subjects.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
+import '../screens/notes/note_screen.dart';
+
 class NotificationApi {
-  static final _notification = FlutterLocalNotificationsPlugin();
+  static final notification = FlutterLocalNotificationsPlugin();
   static final onNotification = BehaviorSubject<String?>();
 
   static Future _notificatonDetails() async {
@@ -49,11 +52,14 @@ class NotificationApi {
     const setting = InitializationSettings(android: android, iOS: iOS);
 
     // When app close
-    final details = await _notification.getNotificationAppLaunchDetails();
+    final details = await notification.getNotificationAppLaunchDetails();
     if (details != null && details.didNotificationLaunchApp) {
-      onNotification.add(details.payload);
+      onNotification.add(details.payload);      
     }
-    await _notification.initialize(setting,
+
+    
+  
+    await notification.initialize(setting,
         onSelectNotification: (String? payload) async {
       onNotification.add(payload);
     });
@@ -62,6 +68,27 @@ class NotificationApi {
       tz.initializeTimeZones();
       final locationName = await FlutterNativeTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(locationName));
+    }
+  }
+
+
+
+  static Future runWhileAppIsTerminated(BuildContext context) async {
+    var details =
+        await NotificationApi.notification.getNotificationAppLaunchDetails();
+
+    if (details!.didNotificationLaunchApp) {
+      if (details.payload != null) {
+        NotificationApi.notification.cancel(int.parse(details.payload!));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return NoteScreen(noteId: int.parse(details.payload!));
+            },
+            fullscreenDialog: true,
+          ),
+        );
+      }
     }
   }
 
@@ -86,7 +113,7 @@ class NotificationApi {
     String? body,
     String? payload,
   }) async {
-    _notification.show(
+    notification.show(
       id!,
       title,
       body,
@@ -102,7 +129,7 @@ class NotificationApi {
     String? payload,
     required tz.TZDateTime schudelDate,
   }) async {
-    await _notification.zonedSchedule(
+    await notification.zonedSchedule(
       id!,
       title,
       body,
@@ -143,6 +170,6 @@ class NotificationApi {
     return scheduleDate;
   }
 
-  static void cancel(int id) => _notification.cancel(id);
-  static void cancalAll() => _notification.cancelAll();
+  static void cancel(int id) => notification.cancel(id);
+  static void cancalAll() => notification.cancelAll();
 }

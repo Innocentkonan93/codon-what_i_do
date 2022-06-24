@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,7 +10,7 @@ import '../bloc/style/sheet_style_bloc.dart';
 
 // ignore: must_be_immutable
 class CustomTextStylePanel extends StatefulWidget {
-  CustomTextStylePanel({
+  const CustomTextStylePanel({
     required this.fontSize,
     required this.textAlign,
     this.note,
@@ -201,7 +203,6 @@ class _CustomTextStylePanelState extends State<CustomTextStylePanel> {
                                 ),
                               ),
                             );
-
                         Navigator.pop(context);
                       }
                       context.read<SheetStyleBloc>().add(

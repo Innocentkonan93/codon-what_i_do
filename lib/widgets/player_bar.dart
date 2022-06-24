@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -79,16 +81,18 @@ class _PlayerBarState extends State<PlayerBar> {
   }
 
   Future setAudio() async {
+    setState(() {
+      isPlaying = false;
+    });
+
     audioPlayer.setReleaseMode(ReleaseMode.LOOP);
 
     // final result = await FilePicker.platform.pickFiles();
 
-    if (widget.musicFile != null) {
-      final file = File(widget.musicFile.path);
+    final file = File(widget.musicFile.path);
 
-      audioPlayer.setUrl(file.path, isLocal: true);
-      print(file.path);
-    }
+    audioPlayer.setUrl(file.path, isLocal: true);
+    print(file.path);
   }
 
   @override
@@ -142,9 +146,7 @@ class _PlayerBarState extends State<PlayerBar> {
                         thumbShape:
                             RoundSliderThumbShape(enabledThumbRadius: 5),
                         thumbColor: Colors.white,
-                        trackHeight: 10
-                    ),
-
+                        trackHeight: 10),
                     child: Slider(
                       thumbColor: Theme.of(context).colorScheme.background,
                       activeColor: Theme.of(context).colorScheme.onBackground,

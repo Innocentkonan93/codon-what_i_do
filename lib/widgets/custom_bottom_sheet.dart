@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zoknot/models/note_model.dart';
@@ -29,7 +31,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
       height: 49,
-      color: Colors.white12,
+      color: Colors.grey[300],
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,7 +64,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           BlocBuilder<SheetColorBloc, SheetColorState>(
             builder: (context, state) {
               return widget.note == null
-                  ? GestureDetector(
+                  ? InkWell(
                       onTap: () async {
                         final result = await showDialog(
                           context: context,
@@ -78,27 +80,32 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
 
                         if (result != null) {
                           print(result);
-                          context
-                              .read<SheetColorBloc>()
-                              .add(SetSheetColor(colorString: result));
+                          context.read<SheetColorBloc>().add(
+                                SetSheetColor(colorString: result),
+                              );
                         }
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(
-                          sheetColors.length,
-                          (index) {
-                            return Container(
-                              height: 12,
-                              width: 12,
-                              margin: const EdgeInsets.symmetric(horizontal: 3),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: sheetColors[index],
-                              ),
-                            );
-                          },
+                      child: SizedBox(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(
+                            sheetColors.length,
+                            (index) {
+                              return Container(
+                                height: 12,
+                                width: 12,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 3),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: sheetColors[index],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     )

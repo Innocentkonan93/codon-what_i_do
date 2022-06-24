@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:zoknot/bloc/notes/notes_bloc.dart';
-import 'package:zoknot/configs/theme.dart';
 import 'package:zoknot/providers/custom_bloc_provider.dart';
-import 'package:zoknot/repositories/note/note_repository.dart';
 import 'package:zoknot/screens/screens.dart';
 
 import 'bloc/theme/change_theme_bloc.dart';
+import 'services/NotificationService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
-  // NotificationApi.init(initSchedule: true);
+  NotificationApi.init(initSchedule: true);
   runApp(const CustomBlocProvider());
 }
 
@@ -45,7 +42,7 @@ class MyApp extends StatelessWidget {
             home: const HomeScreen(),
           );
         } else {
-          return SizedBox();
+          return const SizedBox();
         }
       },
     );
